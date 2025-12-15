@@ -119,7 +119,7 @@
                         </div>
                     </div>
                     <p>
-                        Senior iOS Engineer & Technical Lead specializing in concurrent systems, offline-first architecture, and complex third-party integrations. Optimized core engines to cut data usage by 35% and backend storage costs by 20% while guiding teams to 99.9% crash-free releases. Passionate about building scalable SDKs and high-performance consumer apps that keep the UI smooth at 60fps.
+                        Senior iOS Engineer & Technical Lead specializing in concurrent systems, offline-first architecture, and complex third-party integrations. Optimized core engines to reduce data usage by 35% and server costs by 20% through payload and caching optimizations, while guiding teams to 99.9% crash-free releases. Passionate about building scalable SDKs and high-performance consumer apps.
                         <br><br>
                         Open to remote roles and relocation—feel free to reach out.
                     </p>
@@ -168,7 +168,7 @@
                     <h5>Quality & Performance</h5>
                     <ul>
                         <li>Instruments (Time Profiler, Leaks), LLDB</li>
-                        <li>XCTest, Snapshot Testing</li>
+                        <li>XCTest, XCUITest, Snapshot Testing</li>
                         <li>CI/CD (Xcode Cloud), Datadog/Sentry</li>
                     </ul>
                 </div>
@@ -229,9 +229,10 @@
                         </em></p>
 
                         <ul>
-                            <li>Architected a real-time multiplayer engine (Firestore/Cloud Functions) handling sub-second synchronization for races and lobbies</li>
-                            <li>Built high-performance Live Activities & Dynamic Island features plus a watchOS companion via WatchConnectivity</li>
-                            <li>Engineered a “Ghost Runner” simulation system to solve cold-start issues, mimicking human pacing variations</li>
+                            <li>Engineered a hybrid real-time multiplayer engine combining Firestore for document sync and BrainCloud RTT for event-driven matchmaking, achieving low-latency state synchronization for concurrent racers</li>
+                            <li>Developed a fault-tolerant background location service using CoreLocation, handling aggressive OS suspension policies to ensure reliable race tracking while the device is locked</li>
+                            <li>Built a bidirectional WatchConnectivity layer to sync high-frequency race telemetry between iOS and watchOS, optimizing payload size to prevent WCSession throttling</li>
+                            <li>Shipped Live Activities & Dynamic Island integrations, allowing users to track real-time race progress on the lock screen without app foregrounding</li>
                         </ul>
                     </div>
                     <div class="resume-item">
@@ -249,37 +250,51 @@
                         </ul>
                     </div>
                     <div class="resume-item">
-                        <h4>AI SmartQuiz</h4>
+                        <h4>Amour</h4>
                         <p><em>
-                            AI-powered quiz app with custom dynamic quizzes
+                            A Space fo Couples
                             <br>
-                            Available on the <a href="https://apps.apple.com/us/app/id6736992820">App Store</a>
+                            Available on the <a href="https://apps.apple.com/eg/app/id6740337214">App Store</a>
                         </em></p>
 
                         <ul>
-                            <li>Integrated OpenAI API to dynamically generate quizzes across 20+ topics, reducing question creation time by 70%</li>
-                            <li>Developed a custom topic engine so users can request any subject and receive tailored quizzes in seconds</li>
-                            <li>Introduced adaptive difficulty algorithms, increasing average session duration by 30%</li>
+                            <li>Engineered a thread-safe, dual-layer image caching system (Memory + Disk) with strict cost limits (50MB), eliminating Out-Of-Memory crashes during infinite scroll sessions</li>
+                            <li>Optimized data fetching by implementing custom PostgreSQL RPCs (Remote Procedure Calls) to handle heavy filtering (blocking/pagination) on the server, reducing client-side payload size by ~40%.</li>
+                            <li>Built a universal routing system handling Deep Links and Push Notifications, ensuring consistent navigation state across cold launches and background operational modes</li>
                         </ul>
                     </div>
-                    <div class="resume-item">
-                        <h4>Focus4</h4>
-                        <p><em>
-                            Productivity app with personalized AI suggestions
-                            <br>
-                            Available on the <a href="https://apps.apple.com/us/app/id6739164359">App Store</a>
-                        </em></p>
+<!--                    <div class="resume-item">-->
+<!--                        <h4>AI SmartQuiz</h4>-->
+<!--                        <p><em>-->
+<!--                            AI-powered quiz app with custom dynamic quizzes-->
+<!--                            <br>-->
+<!--                            Available on the <a href="https://apps.apple.com/us/app/id6736992820">App Store</a>-->
+<!--                        </em></p>-->
 
-                        <ul>
-                            <li>Created a gamified focus tracker with streaks and calendar insights to boost user engagement</li>
-                            <li>Designed an interactive animated virtual bird companion, boosting daily app opens by 25%</li>
-                        </ul>
-                    </div>
+<!--                        <ul>-->
+<!--                            <li>Integrated OpenAI API to dynamically generate quizzes across 20+ topics, reducing question creation time by 70%</li>-->
+<!--                            <li>Developed a custom topic engine so users can request any subject and receive tailored quizzes in seconds</li>-->
+<!--                            <li>Introduced adaptive difficulty algorithms, increasing average session duration by 30%</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                    <div class="resume-item">-->
+<!--                        <h4>Focus4</h4>-->
+<!--                        <p><em>-->
+<!--                            Productivity app with personalized AI suggestions-->
+<!--                            <br>-->
+<!--                            Available on the <a href="https://apps.apple.com/us/app/id6739164359">App Store</a>-->
+<!--                        </em></p>-->
+
+<!--                        <ul>-->
+<!--                            <li>Created a gamified focus tracker with streaks and calendar insights to boost user engagement</li>-->
+<!--                            <li>Designed an interactive animated virtual bird companion, boosting daily app opens by 25%</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
                 </div>
                 <div class="col-lg-6">
                     <h3 class="resume-title">Professional Experience</h3>
                     <div class="resume-item">
-                        <h4>Senior iOS Engineer</h4>
+                        <h4>Senior iOS Engineer & Tech Lead</h4>
                         <h5>2025 – Present</h5>
                         <p><em>Sellou — Utah, United States (Remote)</em></p>
                         <ul>
@@ -354,6 +369,20 @@
 
                 <div class="col-lg-4 col-md-6 portfolio-item filter-app">
                     <div class="portfolio-wrap">
+                        <img alt="" class="img-fluid" src="assets/img/portfolio/Sellou.jpg">
+                        <div class="portfolio-info">
+                            <h4>Sellou</h4>
+                            <p>iOS App</p>
+                            <div class="portfolio-links">
+                                <a href="https://apps.apple.com/us/app/id1548126433" target="_blank" rel="noopener noreferrer" title="Portfolio Details"><i
+                                        class="bx bx-link"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+                    <div class="portfolio-wrap">
                         <img alt="" class="img-fluid" src="assets/img/portfolio/RaceMe.jpg">
                         <div class="portfolio-info">
                             <h4>RaceMe!</h4>
@@ -382,6 +411,20 @@
 
                 <div class="col-lg-4 col-md-6 portfolio-item filter-app">
                     <div class="portfolio-wrap">
+                        <img alt="" class="img-fluid" src="assets/img/portfolio/Focus4.png">
+                        <div class="portfolio-info">
+                            <h4>Focus4</h4>
+                            <p>iOS/iPadOS App</p>
+                            <div class="portfolio-links">
+                                <a href="https://apps.apple.com/us/app/id6739164359" target="_blank" rel="noopener noreferrer" title="Portfolio Details"><i
+                                        class="bx bx-link"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+                    <div class="portfolio-wrap">
                         <img alt="" class="img-fluid" src="assets/img/portfolio/lner.jpg">
                         <div class="portfolio-info">
                             <h4>LNER Door to Door</h4>
@@ -396,12 +439,12 @@
 
                 <div class="col-lg-4 col-md-6 portfolio-item filter-app">
                     <div class="portfolio-wrap">
-                        <img alt="" class="img-fluid" src="assets/img/portfolio/Focus4.png">
+                        <img alt="" class="img-fluid" src="assets/img/portfolio/PlotMyCalories.jpg">
                         <div class="portfolio-info">
-                            <h4>Focus4</h4>
-                            <p>iOS/iPadOS App</p>
+                            <h4>Plot My Calories AI</h4>
+                            <p>iOS App</p>
                             <div class="portfolio-links">
-                                <a href="https://apps.apple.com/us/app/id6739164359" target="_blank" rel="noopener noreferrer" title="Portfolio Details"><i
+                                <a href="https://apps.apple.com/us/app/id6752576373" target="_blank" rel="noopener noreferrer" title="Portfolio Details"><i
                                         class="bx bx-link"></i></a>
                             </div>
                         </div>
@@ -422,6 +465,20 @@
                     </div>
                 </div>
 
+<!--                <div class="col-lg-4 col-md-6 portfolio-item filter-app">-->
+<!--                    <div class="portfolio-wrap">-->
+<!--                        <img alt="" class="img-fluid" src="assets/img/portfolio/JetScript.png">-->
+<!--                        <div class="portfolio-info">-->
+<!--                            <h4>JetScript</h4>-->
+<!--                            <p>macOS App</p>-->
+<!--                            <div class="portfolio-links">-->
+<!--                                <a href="https://github.com/KirlosYousef/JetScript" target="_blank" rel="noopener noreferrer" title="Portfolio Details"><i-->
+<!--                                        class="bx bx-link"></i></a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
                 <div class="col-lg-4 col-md-6 portfolio-item filter-app">
                     <div class="portfolio-wrap">
                         <img alt="" class="img-fluid" src="assets/img/portfolio/SmartQuizAI.png">
@@ -436,19 +493,21 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                    <div class="portfolio-wrap">
-                        <img alt="" class="img-fluid" src="assets/img/portfolio/JetScript.png">
-                        <div class="portfolio-info">
-                            <h4>JetScript</h4>
-                            <p>macOS App</p>
-                            <div class="portfolio-links">
-                                <a href="https://github.com/KirlosYousef/JetScript" target="_blank" rel="noopener noreferrer" title="Portfolio Details"><i
-                                        class="bx bx-link"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="col-lg-4 col-md-6 portfolio-item filter-app"></div>-->
+
+<!--                <div class="col-lg-4 col-md-6 portfolio-item filter-app">-->
+<!--                    <div class="portfolio-wrap">-->
+<!--                        <img alt="" class="img-fluid" src="assets/img/portfolio/CaptureCoach.jpeg">-->
+<!--                        <div class="portfolio-info">-->
+<!--                            <h4>CaptureCoach</h4>-->
+<!--                            <p>iOS App</p>-->
+<!--                            <div class="portfolio-links">-->
+<!--                                <a href="https://github.com/KirlosYousef/CaptureCoach" target="_blank" rel="noopener noreferrer" title="Portfolio Details"><i-->
+<!--                                        class="bx bx-link"></i></a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
                 <div class="col-lg-4 col-md-6 portfolio-item filter-app">
                     <div class="portfolio-wrap">
@@ -458,20 +517,6 @@
                             <p>iOS App</p>
                             <div class="portfolio-links">
                                 <a href="https://apps.apple.com/gb/app/id1613184779" target="_blank" rel="noopener noreferrer" title="Portfolio Details"><i
-                                        class="bx bx-link"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                    <div class="portfolio-wrap">
-                        <img alt="" class="img-fluid" src="assets/img/portfolio/CaptureCoach.jpeg">
-                        <div class="portfolio-info">
-                            <h4>CaptureCoach</h4>
-                            <p>iOS App</p>
-                            <div class="portfolio-links">
-                                <a href="https://github.com/KirlosYousef/CaptureCoach" target="_blank" rel="noopener noreferrer" title="Portfolio Details"><i
                                         class="bx bx-link"></i></a>
                             </div>
                         </div>
