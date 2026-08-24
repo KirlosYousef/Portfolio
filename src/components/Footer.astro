@@ -1,0 +1,26 @@
+---
+import { profile } from '@/data/profile';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container-wide site-footer__inner">
+    <div>
+      <a class="wordmark wordmark--footer" href="/" aria-label="Kirlos Yousef, home"
+        ><span>KY</span></a
+      >
+      <p>Senior iOS Engineer & Tech Lead.<br />Building dependable products with care.</p>
+    </div>
+    <nav aria-label="Footer navigation">
+      <a href="/work/">Selected work</a>
+      <a href={profile.linkedin} target="_blank" rel="noreferrer"
+        >LinkedIn <span aria-hidden="true">↗</span></a
+      >
+      <a href={profile.github} target="_blank" rel="noreferrer"
+        >GitHub <span aria-hidden="true">↗</span></a
+      >
+      <a href={`mailto:${profile.email}`}>Email</a>
+    </nav>
+    <p class="site-footer__legal">© {year} Kirlos Yousef<br />Cairo time · EEST</p>
+  </div>
+</footer>

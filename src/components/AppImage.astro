@@ -1,0 +1,37 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: string;
+  alt: string;
+  kind?: 'icon' | 'portrait';
+  loading?: 'eager' | 'lazy';
+  class?: string;
+}
+
+const { src, alt, kind = 'icon', loading = 'lazy', class: className } = Astro.props;
+const assets = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpg,jpeg,png}', {
+  eager: true,
+});
+const assetKey = src.replace('/images/', '/src/assets/');
+const asset = assets[assetKey]?.default;
+
+if (!asset) throw new Error(`Missing image asset: ${src}`);
+
+const widths = kind === 'portrait' ? [320, 480, 720, 960] : [128, 256, 384, 512];
+const sizes =
+  kind === 'portrait' ? '(max-width: 768px) 100vw, 38vw' : '(max-width: 768px) 45vw, 22vw';
+---
+
+<Image
+  src={asset}
+  alt={alt}
+  widths={widths}
+  sizes={sizes}
+  format="avif"
+  quality={82}
+  loading={loading}
+  decoding="async"
+  class={className}
+/>

@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import AdditionalProducts from '@/components/AdditionalProducts.astro';
+import ArrowIcon from '@/components/ArrowIcon.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import SectionIntro from '@/components/SectionIntro.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title="Selected iOS Work — Kirlos Yousef"
+  description="Seven detailed iOS case studies and a curated selection of independent products built by Kirlos Yousef."
+>
+  <section class="page-hero">
+    <div class="container-wide page-hero__grid">
+      <div data-reveal>
+        <p class="eyebrow">Work · 10 selected products</p>
+        <h1>Product craft, <em>under pressure.</em></h1>
+      </div>
+      <div class="page-hero__aside" data-reveal>
+        <p>
+          Selected case studies focus on the hard parts: real-time state, background execution,
+          offline behavior, payments, applied AI, and technical leadership.
+        </p>
+        <a class="text-link" href="mailto:kirlosy@icloud.com">Discuss a role <ArrowIcon /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--night">
+    <div class="container-wide">
+      <SectionIntro
+        eyebrow="Selected case studies"
+        title="Seven products. Seven different system constraints."
+        description="The contribution and outcomes below are grounded in résumé-backed or public product information."
+        theme="dark"
+      />
+      <div class="work-grid">
+        {
+          featuredWork.map((project) => (
+            <ProjectCard
+              slug={project.id}
+              title={project.data.shortTitle}
+              eyebrow={project.data.eyebrow}
+              summary={project.data.summary}
+              image={project.data.image}
+              imageAlt={project.data.imageAlt}
+              accent={project.data.accent}
+              order={project.data.order}
+              platforms={project.data.platforms}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container-wide">
+      <SectionIntro
+        eyebrow="Independent products · 3 more"
+        title="Shipped, maintained, and available now."
+        description="A tighter selection of recent independent products that adds evidence of applied AI, monetization, engagement systems, and end-to-end ownership."
+      />
+      <AdditionalProducts />
+    </div>
+  </section>
+</BaseLayout>

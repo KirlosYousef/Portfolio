@@ -1,0 +1,192 @@
+---
+import '@fontsource-variable/manrope';
+import '@fontsource-variable/newsreader/wght-italic.css';
+import manropeFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
+import newsreaderFont from '@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2?url';
+import { ClientRouter } from 'astro:transitions';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { profile } from '@/data/profile';
+import '@/styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  schema?: Record<string, unknown>;
+}
+
+const {
+  title = `${profile.name} — ${profile.title}`,
+  description = profile.introduction,
+  image = '/og-image.png',
+  type = 'website',
+  schema,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL(image, Astro.site);
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: 'Senior iOS Engineer and Tech Lead',
+  url: profile.website,
+  email: `mailto:${profile.email}`,
+  address: { '@type': 'PostalAddress', addressCountry: 'Egypt' },
+  sameAs: [profile.linkedin, profile.github],
+  knowsAbout: ['iOS', 'Swift', 'SwiftUI', 'UIKit', 'Swift Concurrency', 'watchOS', 'Applied AI'],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f0e8" />
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href={manropeFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={newsreaderFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preconnect" href="https://apps.apple.com" />
+    <title>{title}</title>
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:site_name" content="Kirlos Yousef" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      const setupPortfolioUI = () => {
+        type PortfolioWindow = Window & { portfolioUIController?: AbortController };
+        const portfolioWindow = window as PortfolioWindow;
+        portfolioWindow.portfolioUIController?.abort();
+        const controller = new AbortController();
+        portfolioWindow.portfolioUIController = controller;
+        const { signal } = controller;
+
+        const menuButton = document.querySelector<HTMLButtonElement>('[data-menu-button]');
+        const nav = document.querySelector<HTMLElement>('[data-nav]');
+
+        const closeMenu = () => {
+          menuButton?.setAttribute('aria-expanded', 'false');
+          nav?.removeAttribute('data-open');
+          document.body.classList.remove('menu-open');
+        };
+
+        menuButton?.addEventListener(
+          'click',
+          () => {
+            const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
+            menuButton.setAttribute('aria-expanded', String(!isOpen));
+            nav?.toggleAttribute('data-open', !isOpen);
+            document.body.classList.toggle('menu-open', !isOpen);
+          },
+          { signal },
+        );
+
+        nav
+          ?.querySelectorAll('a')
+          .forEach((link) => link.addEventListener('click', closeMenu, { signal }));
+        window.addEventListener('keydown', (event) => event.key === 'Escape' && closeMenu(), {
+          signal,
+        });
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const revealItems = document.querySelectorAll<HTMLElement>('[data-reveal]');
+        if (reduceMotion || !('IntersectionObserver' in window)) {
+          revealItems.forEach((item) => item.setAttribute('data-visible', ''));
+        } else {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  (entry.target as HTMLElement).setAttribute('data-visible', '');
+                  observer.unobserve(entry.target);
+                }
+              });
+            },
+            { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+          );
+          signal.addEventListener('abort', () => observer.disconnect(), { once: true });
+          revealItems.forEach((item) => observer.observe(item));
+        }
+
+        const constellation = document.querySelector<HTMLElement>('[data-constellation]');
+        if (constellation && !reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+          let bounds = constellation.getBoundingClientRect();
+          let pointerX = 0;
+          let pointerY = 0;
+          let animationFrame = 0;
+
+          const renderPointerDepth = () => {
+            constellation.style.setProperty('--pointer-x', String(pointerX));
+            constellation.style.setProperty('--pointer-y', String(pointerY));
+            animationFrame = 0;
+          };
+
+          const schedulePointerDepth = () => {
+            if (!animationFrame) animationFrame = window.requestAnimationFrame(renderPointerDepth);
+          };
+
+          constellation.addEventListener(
+            'pointerenter',
+            () => {
+              bounds = constellation.getBoundingClientRect();
+            },
+            { signal },
+          );
+          constellation.addEventListener(
+            'pointermove',
+            (event) => {
+              pointerX = (event.clientX - bounds.left) / bounds.width - 0.5;
+              pointerY = (event.clientY - bounds.top) / bounds.height - 0.5;
+              schedulePointerDepth();
+            },
+            { passive: true, signal },
+          );
+          constellation.addEventListener(
+            'pointerleave',
+            () => {
+              pointerX = 0;
+              pointerY = 0;
+              schedulePointerDepth();
+            },
+            { signal },
+          );
+          signal.addEventListener(
+            'abort',
+            () => {
+              if (animationFrame) window.cancelAnimationFrame(animationFrame);
+            },
+            { once: true },
+          );
+        }
+      };
+
+      document.addEventListener('astro:page-load', setupPortfolioUI);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+---
+import { profile } from '@/data/profile';
+
+const pathname = Astro.url.pathname;
+const workActive = pathname.startsWith('/work');
+---
+
+<header class="site-header">
+  <div class="site-header__inner container-wide">
+    <a class="wordmark" href="/" aria-label="Kirlos Yousef, home">
+      <span>KY</span>
+      <span class="wordmark__name">Kirlos Yousef</span>
+    </a>
+
+    <button
+      class="menu-button"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-navigation"
+      data-menu-button
+    >
+      <span class="sr-only">Toggle navigation</span>
+      <span></span><span></span>
+    </button>
+
+    <nav id="site-navigation" class="site-nav" aria-label="Primary navigation" data-nav>
+      <a href="/work/" aria-current={workActive ? 'page' : undefined}>Work</a>
+      <a href="/#experience">Experience</a>
+      <a href="/#about">About</a>
+      <a href={profile.resume} target="_blank">Résumé <span aria-hidden="true">↗</span></a>
+      <a class="button button--small button--ink" href={`mailto:${profile.email}`}>Let’s talk</a>
+    </nav>
+  </div>
+</header>

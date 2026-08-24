@@ -1,0 +1,128 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ArrowIcon from '@/components/ArrowIcon.astro';
+import AppImage from '@/components/AppImage.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+  return entries.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      next: entries[(index + 1) % entries.length],
+    },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'work'>;
+  next: CollectionEntry<'work'>;
+}
+
+const { entry, next } = Astro.props;
+const { Content } = await render(entry);
+const data = entry.data;
+const projectSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: data.title,
+  description: data.summary,
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: data.platforms.join(', '),
+  author: { '@type': 'Person', name: 'Kirlos Yousef' },
+  url: new URL(`/work/${entry.id}/`, Astro.site).href,
+};
+---
+
+<BaseLayout
+  title={`${data.title} — Kirlos Yousef`}
+  description={data.summary}
+  type="article"
+  schema={projectSchema}
+>
+  <section class="case-hero" style={`--case-accent: ${data.accent}`}>
+    <div class="container-wide">
+      <a class="text-link case-hero__back" href="/work/"
+        ><span aria-hidden="true">←</span> All work</a
+      >
+      <div class="case-hero__grid">
+        <div data-reveal>
+          <p class="eyebrow">{data.eyebrow}</p>
+          <h1>{data.title}</h1>
+          <p class="case-hero__summary">{data.summary}</p>
+          <dl class="case-hero__meta">
+            <div><dt>Role</dt><dd>{data.role}</dd></div>
+            <div><dt>Period</dt><dd>{data.period}</dd></div>
+            <div><dt>Platforms</dt><dd>{data.platforms.join(' · ')}</dd></div>
+          </dl>
+        </div>
+        <div class="case-artwork" transition:name={`project-image-${entry.id}`} data-reveal>
+          <AppImage src={data.image} alt={data.imageAlt} loading="eager" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--night">
+    <div class="container-wide case-proof">
+      <div class="case-proof__item case-proof__item--role">
+        <span>Contribution</span>
+        <p>{data.contribution}</p>
+      </div>
+      {
+        data.outcomes.map((outcome) => (
+          <div class="case-proof__item">
+            <span>{outcome.value}</span>
+            <p>{outcome.label}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section section--surface">
+    <div class="container case-body">
+      <aside class="case-body__aside" data-reveal>
+        <h2>Technology</h2>
+        <ul>
+          {data.technologies.map((technology) => <li>{technology}</li>)}
+        </ul>
+        <p class="case-body__attribution">{data.attribution}</p>
+        {
+          data.links.map((link) => (
+            <a class="button button--ink" href={link.url} target="_blank" rel="noreferrer">
+              {link.label} <ArrowIcon />
+            </a>
+          ))
+        }
+      </aside>
+      <article class="prose" data-reveal>
+        <Content />
+      </article>
+    </div>
+
+    <div class="container case-lists">
+      <section class="case-list" data-reveal>
+        <h2>Engineering challenges</h2>
+        <ol>{data.challenges.map((challenge) => <li>{challenge}</li>)}</ol>
+      </section>
+      <section class="case-list" data-reveal>
+        <h2>Key decisions</h2>
+        <ol>{data.decisions.map((decision) => <li>{decision}</li>)}</ol>
+      </section>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container-wide">
+      <a class="next-project" href={`/work/${next.id}/`}>
+        <div>
+          <p class="eyebrow">Next case study</p>
+          <h2>{next.data.shortTitle}</h2>
+        </div>
+        <ArrowIcon />
+      </a>
+    </div>
+  </section>
+</BaseLayout>

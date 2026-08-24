@@ -1,0 +1,39 @@
+---
+import ArrowIcon from './ArrowIcon.astro';
+import AppImage from './AppImage.astro';
+
+interface Props {
+  slug: string;
+  title: string;
+  eyebrow: string;
+  summary: string;
+  image: string;
+  imageAlt: string;
+  accent: string;
+  order: number;
+  platforms: string[];
+}
+
+const { slug, title, eyebrow, summary, image, imageAlt, accent, order, platforms } = Astro.props;
+const number = String(order).padStart(2, '0');
+---
+
+<article
+  class:list={['project-card', `project-card--${slug}`]}
+  style={`--project-accent: ${accent}`}
+  data-reveal
+>
+  <a class="project-card__link" href={`/work/${slug}/`} aria-label={`Read the ${title} case study`}>
+    <div class="project-card__media" transition:name={`project-image-${slug}`}>
+      <span class="project-card__number">{number}</span>
+      <AppImage src={image} alt={imageAlt} />
+      <span class="project-card__platforms">{platforms.join(' · ')}</span>
+    </div>
+    <div class="project-card__copy">
+      <p class="eyebrow">{eyebrow}</p>
+      <h3>{title}</h3>
+      <p>{summary}</p>
+      <span class="text-link">View case study <ArrowIcon /></span>
+    </div>
+  </a>
+</article>
