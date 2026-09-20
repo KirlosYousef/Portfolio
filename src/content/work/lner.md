@@ -1,7 +1,11 @@
 ---
 title: 'LNER — Door to Door'
 shortTitle: 'LNER'
-order: 6
+order: 7
+tracks: ['ios']
+priority:
+  general: 4
+  ios: 2
 eyebrow: 'Client product · Mobility & payments'
 role: 'iOS Team Lead'
 period: '2024 — 2025'

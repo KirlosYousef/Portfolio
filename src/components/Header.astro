@@ -3,6 +3,9 @@ import { profile } from '@/data/profile';
 
 const pathname = Astro.url.pathname;
 const workActive = pathname.startsWith('/work');
+const aiActive = pathname.startsWith('/ai');
+const iosActive = pathname.startsWith('/ios');
+const overviewActive = pathname === '/';
 ---
 
 <header class="site-header">
@@ -24,10 +27,22 @@ const workActive = pathname.startsWith('/work');
     </button>
 
     <nav id="site-navigation" class="site-nav" aria-label="Primary navigation" data-nav>
+      <a href="/" aria-current={overviewActive ? 'page' : undefined}>Overview</a>
+      {
+        !iosActive && (
+          <a href="/ai/" aria-current={aiActive ? 'page' : undefined}>
+            AI
+          </a>
+        )
+      }
+      {
+        !aiActive && (
+          <a href="/ios/" aria-current={iosActive ? 'page' : undefined}>
+            iOS
+          </a>
+        )
+      }
       <a href="/work/" aria-current={workActive ? 'page' : undefined}>Work</a>
-      <a href="/#experience">Experience</a>
-      <a href="/#about">About</a>
-      <a href={profile.resume} target="_blank">Résumé <span aria-hidden="true">↗</span></a>
       <a class="button button--small button--ink" href={`mailto:${profile.email}`}>Let’s talk</a>
     </nav>
   </div>

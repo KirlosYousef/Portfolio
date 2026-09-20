@@ -1,6 +1,9 @@
 ---
 import { profile } from '@/data/profile';
 const year = new Date().getFullYear();
+const pathname = Astro.url.pathname;
+const aiActive = pathname.startsWith('/ai');
+const iosActive = pathname.startsWith('/ios');
 ---
 
 <footer class="site-footer">
@@ -9,9 +12,11 @@ const year = new Date().getFullYear();
       <a class="wordmark wordmark--footer" href="/" aria-label="Kirlos Yousef, home"
         ><span>KY</span></a
       >
-      <p>Senior iOS Engineer & Tech Lead.<br />Building dependable products with care.</p>
+      <p>Senior Software Engineer.<br />iOS & AI application engineering.</p>
     </div>
     <nav aria-label="Footer navigation">
+      {!iosActive && <a href="/ai/">AI engineering</a>}
+      {!aiActive && <a href="/ios/">iOS engineering</a>}
       <a href="/work/">Selected work</a>
       <a href={profile.linkedin} target="_blank" rel="noreferrer"
         >LinkedIn <span aria-hidden="true">↗</span></a

@@ -1,6 +1,6 @@
 # Kirlos Yousef — Portfolio
 
-A recruiter-focused portfolio for a Senior iOS Engineer and Tech Lead. The site presents selected technical case studies, leadership experience, measurable delivery outcomes, and a curated set of current products without shipping a client-side application framework.
+A recruiter-focused portfolio for a Senior Software Engineer working across iOS and AI application engineering. A shared professional history powers a balanced overview plus focused AI and iOS recruiter journeys, with evidence-led case studies and measurable delivery outcomes.
 
 ## Why this stack
 
@@ -19,7 +19,7 @@ src/
   content/work/    Seven validated long-form case studies
   data/            Shared professional and product content
   layouts/         Metadata, navigation, transitions, and global behavior
-  pages/           Static routes
+  pages/           Overview, AI, iOS, work, and case-study routes
   styles/          Design tokens and responsive system
 tests/
   unit/            Content and inventory contracts
@@ -41,9 +41,9 @@ pnpm preview
 
 ## Editing portfolio content
 
-- Professional biography, proof points, experience, and skills live in `src/data/profile.ts`.
+- Professional biography, canonical role history, proof points, track copy, and skills live in `src/data/profile.ts`.
 - Three concise independent-product highlights live in `src/data/additionalProducts.ts`.
-- Each featured project is a Markdown entry in `src/content/work/` with frontmatter validated by `src/content.config.ts`.
+- Each featured project is a Markdown entry in `src/content/work/` with shared track and priority metadata validated by `src/content.config.ts`.
 - App artwork belongs in `src/assets/apps/`. Content entries reference it through stable `/images/apps/...` identifiers resolved by the shared image component.
 - The current résumé is served from `public/resume/`.
 

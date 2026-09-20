@@ -2,7 +2,13 @@ module.exports = {
   ci: {
     collect: {
       staticDistDir: './dist',
-      url: ['http://localhost/', 'http://localhost/work/'],
+      url: [
+        'http://localhost/',
+        'http://localhost/ai/',
+        'http://localhost/ios/',
+        'http://localhost/work/',
+        'http://localhost/work/receipty/',
+      ],
       numberOfRuns: 1,
       settings: {
         chromeFlags: '--headless --no-sandbox',

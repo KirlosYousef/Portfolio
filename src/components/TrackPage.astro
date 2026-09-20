@@ -1,0 +1,210 @@
+---
+import { getCollection } from 'astro:content';
+import ArrowIcon from '@/components/ArrowIcon.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import SectionIntro from '@/components/SectionIntro.astro';
+import { experience, profile, skillsFor, trackContent } from '@/data/profile';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+interface Props {
+  track: 'ai' | 'ios';
+}
+
+const { track } = Astro.props;
+const content = trackContent[track];
+const projects = (await getCollection('work'))
+  .filter((project) => project.data.priority[track] !== undefined)
+  .sort((a, b) => (a.data.priority[track] ?? 99) - (b.data.priority[track] ?? 99));
+const roles = experience;
+const skills = skillsFor(track);
+const pageTitle =
+  track === 'ai'
+    ? 'AI Application Engineering — Kirlos Yousef'
+    : 'Senior iOS Engineering — Kirlos Yousef';
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={content.description}
+  image={track === 'ai' ? '/og-ai.png' : '/og-ios.png'}
+  pageTrack={track}
+>
+  <section class:list={['track-hero', `track-hero--${track}`]}>
+    <div class="container-wide track-hero__grid">
+      <div data-reveal>
+        <p class="eyebrow">{content.label}</p>
+        <h1>{content.title}</h1>
+        <p class="track-hero__lead">{content.description}</p>
+        <div class="hero__actions">
+          <a class="button" href="#featured-work">Explore relevant work <ArrowIcon /></a>
+          <a class="button button--ghost" href={content.resume} target="_blank">View résumé</a>
+        </div>
+      </div>
+      <aside class="track-hero__aside" data-reveal>
+        <p class="track-hero__index">0{track === 'ai' ? '1' : '2'}</p>
+        <p>
+          {
+            track === 'ai'
+              ? 'Senior software-engineering experience applied to LLM products, typed services, retrieval, evaluation, and cloud delivery.'
+              : 'Hands-on Apple-platform engineering backed by team leadership, measurable performance work, and production reliability.'
+          }
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="proof-strip" aria-label={`${content.label} highlights`}>
+    <div class="container-wide proof-strip__grid">
+      {
+        content.proofPoints.map((point) => (
+          <div class="proof-item" data-reveal>
+            <strong>{point.value}</strong>
+            <span>{point.label}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section section--night" id="featured-work">
+    <div class="container-wide">
+      <SectionIntro
+        eyebrow={track === 'ai' ? 'AI evidence · Selected work' : 'iOS evidence · Selected work'}
+        title={track === 'ai'
+          ? 'Systems measured beyond the demo.'
+          : 'Products engineered for real-world constraints.'}
+        description={track === 'ai'
+          ? 'Extraction, retrieval, streaming, native tools, and cloud product systems—each presented with the validation and limits needed to assess the work.'
+          : 'Leadership, performance, offline behavior, payments, background execution, and multi-platform delivery—grounded in concrete product outcomes.'}
+        theme="dark"
+      />
+      <div class="work-grid">
+        {
+          projects
+            .slice(0, 4)
+            .map((project) => (
+              <ProjectCard
+                slug={project.id}
+                title={project.data.shortTitle}
+                eyebrow={project.data.eyebrow}
+                summary={project.data.summary}
+                image={project.data.image}
+                imageAlt={project.data.imageAlt}
+                accent={project.data.accent}
+                order={project.data.priority[track] ?? project.data.order}
+                platforms={project.data.platforms}
+                tracks={project.data.tracks}
+              />
+            ))
+        }
+      </div>
+      <div class="section-action" data-reveal>
+        <a class="button button--light" href="/work/"
+          >Explore the complete work library <ArrowIcon /></a
+        >
+      </div>
+    </div>
+  </section>
+
+  <section class="section track-capabilities">
+    <div class="container">
+      <SectionIntro
+        eyebrow="Relevant capabilities"
+        title={track === 'ai'
+          ? 'From model boundary to production path.'
+          : 'Platform depth with delivery discipline.'}
+        description={track === 'ai'
+          ? 'Tools are grouped by the systems they support, with project evidence taking priority over keyword volume.'
+          : 'Apple-platform expertise is paired with architecture, testing, observability, and dependable team delivery.'}
+      />
+      <div class="skills-grid">
+        {
+          skills.map((group) => (
+            <article class="skill-group" data-reveal>
+              <h3>{group.title}</h3>
+              <ul>
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--surface">
+    <div class="container experience-grid">
+      <div class="experience-sticky" data-reveal>
+        <p class="eyebrow">Professional experience</p>
+        <h2>
+          {
+            track === 'ai'
+              ? 'A senior foundation for AI product work.'
+              : 'Leadership that stays close to the code.'
+          }
+        </h2>
+        <p>
+          {
+            track === 'ai'
+              ? 'The AI specialization sits on top of years spent shipping, debugging, measuring, and leading production software.'
+              : 'The work combines technical direction with direct ownership of architecture, performance, and critical product flows.'
+          }
+        </p>
+      </div>
+      <div class="timeline" aria-label="Professional experience">
+        {
+          roles.map((role) => (
+            <article class="timeline-item" data-reveal data-role-id={role.id}>
+              <p class="timeline-item__period">{role.period}</p>
+              <div>
+                <h3>{role.title}</h3>
+                <p class="timeline-item__company">
+                  {role.company} · {role.descriptor}
+                </p>
+                <p class="timeline-item__location">{role.location}</p>
+                <ul>
+                  {role.highlights.map((highlight) => (
+                    <li>{highlight.text}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container-wide contact-panel" data-reveal>
+      <div class="contact-panel__content">
+        <p class="eyebrow">Roles and freelance projects</p>
+        <h2>
+          {
+            track === 'ai'
+              ? 'Building an AI product or looking for help with an AI project?'
+              : 'Building an iOS product or need experienced help on a project?'
+          }
+        </h2>
+        <p>
+          I’m open to relevant engineering roles and selected freelance projects. Based in Egypt and
+          available for remote work or relocation, I’d be glad to hear what you’re working on.
+        </p>
+        <div class="contact-panel__actions">
+          <a class="button button--light" href={`mailto:${profile.email}`}
+            >Start a conversation <ArrowIcon /></a
+          >
+          <a class="contact-panel__link" href={content.resume} target="_blank">Résumé ↗</a>
+          <a class="contact-panel__link" href={profile.linkedin} target="_blank" rel="noreferrer"
+            >LinkedIn ↗</a
+          >
+          <a class="contact-panel__link" href={profile.github} target="_blank" rel="noreferrer"
+            >GitHub ↗</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -4,10 +4,13 @@ import ArrowIcon from '@/components/ArrowIcon.astro';
 import AppImage from '@/components/AppImage.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import SectionIntro from '@/components/SectionIntro.astro';
-import { experience, profile, proofPoints, skillGroups } from '@/data/profile';
+import { experience, profile, proofPoints, skillsFor } from '@/data/profile';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
-const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+const featuredWork = (await getCollection('work'))
+  .filter((project) => project.data.priority.general !== undefined)
+  .sort((a, b) => (a.data.priority.general ?? 99) - (b.data.priority.general ?? 99));
+const capabilities = skillsFor('general');
 ---
 
 <BaseLayout>
@@ -15,11 +18,13 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
     <div class="container-wide hero__grid">
       <div class="hero__copy" data-reveal>
         <p class="hero__availability">{profile.availability}</p>
-        <h1>Senior iOS Engineer. <em>Technical lead.</em></h1>
+        <h1>
+          Senior software engineer building <em>iOS products</em> and reliable AI applications.
+        </h1>
         <p class="hero__lead">{profile.introduction}</p>
         <div class="hero__actions">
-          <a class="button" href="#selected-work">Explore selected work <ArrowIcon /></a>
-          <a class="button button--ghost" href={profile.resume} target="_blank">View résumé</a>
+          <a class="button" href="/ai/">Explore AI Engineering <ArrowIcon /></a>
+          <a class="button button--ghost" href="/ios/">Explore iOS Engineering <ArrowIcon /></a>
           <a class="hero__email" href={`mailto:${profile.email}`}>{profile.email}</a>
         </div>
       </div>
@@ -27,11 +32,14 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
       <div
         class="constellation"
         data-constellation
-        aria-label="A selection of products Kirlos has built"
+        aria-label="Products spanning AI, iOS, web, and backend engineering"
         data-reveal
       >
         <div class="app-orbit app-orbit--spookling">
           <AppImage src="/images/apps/Spookling.png" alt="Spookling" loading="eager" />
+        </div>
+        <div class="app-orbit app-orbit--receipty">
+          <AppImage src="/images/apps/Receipty.png" alt="Receipty" loading="eager" />
         </div>
         <div class="app-orbit app-orbit--raceme">
           <AppImage src="/images/apps/RaceMe.jpg" alt="RaceMe" loading="eager" />
@@ -39,18 +47,11 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
         <div class="app-orbit app-orbit--revera">
           <AppImage src="/images/apps/Revera.jpg" alt="Revera AI" loading="eager" />
         </div>
-        <div class="app-orbit app-orbit--plot">
-          <AppImage
-            src="/images/apps/PlotMyCalories.jpg"
-            alt="Plot My Calories AI"
-            loading="eager"
-          />
-        </div>
         <div class="app-orbit app-orbit--sellou">
           <AppImage src="/images/apps/Sellou.jpg" alt="Sellou" loading="eager" />
         </div>
         <p class="constellation__label">
-          Products across AI, mobility, health, voice, and real-time systems.
+          One engineering career across mobile, web, backend, and AI systems.
         </p>
       </div>
     </div>
@@ -69,35 +70,62 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
     </div>
   </section>
 
+  <section class="section path-section" aria-labelledby="choose-path">
+    <div class="container-wide">
+      <SectionIntro
+        eyebrow="Selected work · AI and iOS"
+        title="Explore the work behind reliable digital products."
+        description="Whether you’re hiring an engineer or looking for a freelance partner, explore selected AI and iOS work, the decisions behind it, and results delivered."
+      />
+      <div class="path-grid" id="choose-path">
+        <a class="path-card path-card--ai" href="/ai/" data-reveal>
+          <span class="path-card__number">01</span>
+          <p class="eyebrow">AI application engineering</p>
+          <h3>Evaluated LLM systems, retrieval, and production services.</h3>
+          <p>Receipty, Spookling, Revera, and vision-based mobile products.</p>
+          <span class="text-link">Explore AI work <ArrowIcon /></span>
+        </a>
+        <a class="path-card path-card--ios" href="/ios/" data-reveal>
+          <span class="path-card__number">02</span>
+          <p class="eyebrow">Senior iOS engineering</p>
+          <h3>Leadership, platform depth, performance, and reliability.</h3>
+          <p>Sellou, LNER, RaceMe, Revera, BrightBike, and mobility SDKs.</p>
+          <span class="text-link">Explore iOS work <ArrowIcon /></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <section class="section section--night" id="selected-work">
     <div class="container-wide">
       <SectionIntro
-        eyebrow="Selected work · 01"
-        title="Products built for the moments that matter."
-        description="From a runner’s locked screen to a multimodal checkout and a streamed AI response—each project pairs product judgment with dependable engineering."
+        eyebrow="Selected evidence"
+        title="Different systems. The same delivery discipline."
+        description="Four representative projects show how product judgment, explicit constraints, and measurable engineering quality carry across both specializations."
         theme="dark"
       />
       <div class="work-grid">
         {
-          featuredWork
-            .slice(0, 4)
-            .map((project) => (
-              <ProjectCard
-                slug={project.id}
-                title={project.data.shortTitle}
-                eyebrow={project.data.eyebrow}
-                summary={project.data.summary}
-                image={project.data.image}
-                imageAlt={project.data.imageAlt}
-                accent={project.data.accent}
-                order={project.data.order}
-                platforms={project.data.platforms}
-              />
-            ))
+          featuredWork.map((project) => (
+            <ProjectCard
+              slug={project.id}
+              title={project.data.shortTitle}
+              eyebrow={project.data.eyebrow}
+              summary={project.data.summary}
+              image={project.data.image}
+              imageAlt={project.data.imageAlt}
+              accent={project.data.accent}
+              order={project.data.priority.general ?? project.data.order}
+              platforms={project.data.platforms}
+              tracks={project.data.tracks}
+            />
+          ))
         }
       </div>
       <div class="section-action" data-reveal>
-        <a class="button button--light" href="/work/">See all 10 selected products <ArrowIcon /></a>
+        <a class="button button--light" href="/work/"
+          >Explore all 11 selected products <ArrowIcon /></a
+        >
       </div>
     </div>
   </section>
@@ -105,17 +133,17 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
   <section class="section" id="experience">
     <div class="container experience-grid">
       <div class="experience-sticky" data-reveal>
-        <p class="eyebrow">Leadership · 02</p>
-        <h2>Engineering direction with delivery discipline.</h2>
+        <p class="eyebrow">Experience</p>
+        <h2>Growing scope, grounded in shipped work.</h2>
         <p>
-          I lead close to the work: setting architecture, improving team systems, and staying
-          accountable for how the product feels in production.
+          From iOS engineering and team leadership to product ownership across AI, web, and backend,
+          each step expands the surface area without changing the standard for reliability.
         </p>
       </div>
       <div class="timeline" aria-label="Professional experience">
         {
           experience.map((role) => (
-            <article class="timeline-item" data-reveal>
+            <article class="timeline-item" data-reveal data-role-id={role.id}>
               <p class="timeline-item__period">{role.period}</p>
               <div>
                 <h3>{role.title}</h3>
@@ -125,7 +153,7 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
                 <p class="timeline-item__location">{role.location}</p>
                 <ul>
                   {role.highlights.map((highlight) => (
-                    <li>{highlight}</li>
+                    <li>{highlight.text}</li>
                   ))}
                 </ul>
               </div>
@@ -147,8 +175,8 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
           />
         </div>
         <div class="about-copy" data-reveal>
-          <p class="eyebrow">About · 03</p>
-          <h2>Calm systems. <em>Ambitious products.</em></h2>
+          <p class="eyebrow">About</p>
+          <h2>Senior judgment across <em>more than one stack.</em></h2>
           <p class="about-copy__lead">{profile.about}</p>
           <div class="education-note">
             <strong>B.S. Computer Science · University of Debrecen</strong>
@@ -161,7 +189,7 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
 
       <div class="skills-grid" aria-label="Technical capabilities">
         {
-          skillGroups.map((group) => (
+          capabilities.map((group) => (
             <article class="skill-group" data-reveal>
               <h3>{group.title}</h3>
               <ul>
@@ -179,23 +207,25 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
   <section class="section">
     <div class="container-wide contact-panel" data-reveal>
       <div class="contact-panel__content">
-        <p class="eyebrow">Open to the right challenge</p>
-        <h2>Building an iOS product where reliability is part of the experience?</h2>
+        <p class="eyebrow">Roles and freelance projects</p>
+        <h2>Need an engineer to strengthen your team or move a product forward?</h2>
         <p>
-          I'm based in Egypt and open to remote work or relocation. Let’s talk about the product,
-          the team, and the systems that will help both succeed.
+          I’m open to senior iOS and AI application engineering roles, as well as selected freelance
+          projects. Based in Egypt and available for remote work or relocation, I’d be glad to hear
+          what you’re building.
         </p>
         <div class="contact-panel__actions">
           <a class="button button--light" href={`mailto:${profile.email}`}
             >Start a conversation <ArrowIcon /></a
           >
+          <a class="contact-panel__link" href={profile.resumes.ai} target="_blank">AI résumé ↗</a>
+          <a class="contact-panel__link" href={profile.resumes.ios} target="_blank">iOS résumé ↗</a>
           <a class="contact-panel__link" href={profile.linkedin} target="_blank" rel="noreferrer"
             >LinkedIn ↗</a
           >
           <a class="contact-panel__link" href={profile.github} target="_blank" rel="noreferrer"
             >GitHub ↗</a
           >
-          <a class="contact-panel__link" href={profile.resume} target="_blank">Résumé ↗</a>
         </div>
       </div>
     </div>

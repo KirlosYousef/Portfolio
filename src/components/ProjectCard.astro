@@ -12,9 +12,21 @@ interface Props {
   accent: string;
   order: number;
   platforms: string[];
+  tracks?: string[];
 }
 
-const { slug, title, eyebrow, summary, image, imageAlt, accent, order, platforms } = Astro.props;
+const {
+  slug,
+  title,
+  eyebrow,
+  summary,
+  image,
+  imageAlt,
+  accent,
+  order,
+  platforms,
+  tracks = [],
+} = Astro.props;
 const number = String(order).padStart(2, '0');
 ---
 
@@ -22,9 +34,11 @@ const number = String(order).padStart(2, '0');
   class:list={['project-card', `project-card--${slug}`]}
   style={`--project-accent: ${accent}`}
   data-reveal
+  data-project-card
+  data-tracks={tracks.join(' ')}
 >
   <a class="project-card__link" href={`/work/${slug}/`} aria-label={`Read the ${title} case study`}>
-    <div class="project-card__media" transition:name={`project-image-${slug}`}>
+    <div class="project-card__media" transition:name={`project-image-${slug}`} data-depth>
       <span class="project-card__number">{number}</span>
       <AppImage src={image} alt={imageAlt} />
       <span class="project-card__platforms">{platforms.join(' · ')}</span>

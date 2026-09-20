@@ -1,7 +1,10 @@
 ---
 title: 'BrightBike — Bike Share'
 shortTitle: 'BrightBike'
-order: 7
+order: 8
+tracks: ['ios']
+priority:
+  ios: 5
 eyebrow: 'Client product · Offline mobility'
 role: 'iOS Team Lead'
 period: '2024 — 2025'

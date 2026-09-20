@@ -8,6 +8,12 @@ const work = defineCollection({
     title: z.string(),
     shortTitle: z.string(),
     order: z.number().int().positive(),
+    tracks: z.array(z.enum(['ai', 'ios', 'web', 'backend'])).min(1),
+    priority: z.object({
+      general: z.number().int().positive().optional(),
+      ai: z.number().int().positive().optional(),
+      ios: z.number().int().positive().optional(),
+    }),
     eyebrow: z.string(),
     role: z.string(),
     period: z.string(),

@@ -1,7 +1,11 @@
 ---
 title: 'RaceMe — Run with Friends'
 shortTitle: 'RaceMe'
-order: 3
+order: 4
+tracks: ['ios']
+priority:
+  general: 3
+  ios: 3
 eyebrow: 'Independent product · Real-time fitness'
 role: 'Creator & iOS Engineer'
 period: '2020 — Present'

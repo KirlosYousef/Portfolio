@@ -1,44 +1,61 @@
 ---
-title: 'Spookling — AI Agent'
+title: 'Spookling — AI Workspace'
 shortTitle: 'Spookling'
 order: 2
-eyebrow: 'Applied AI · Native productivity'
-role: 'iOS Tech Lead'
-period: '2025 — Present'
-platforms: ['iOS']
-summary: 'A native AI agent that streams responses in real time and turns model tool calls into useful actions across Apple productivity services.'
-contribution: 'Designed and shipped the iOS architecture, including modular Swift packages, Server-Sent Events, and native EventKit actions.'
+tracks: ['ai', 'ios', 'web', 'backend']
+priority:
+  general: 1
+  ai: 2
+eyebrow: 'Product engineering · AI workspace'
+role: 'Product Engineer — AI Applications'
+period: '08/2025 — Present'
+platforms: ['iOS', 'Web', 'Backend']
+summary: 'An AI workspace spanning native chat, calendar tools, browser-based coding, collaboration, search, and connected services.'
+contribution: 'Built across iOS and web, then expanded into AWS backend services for chat, search, integrations, history, booking, and billing.'
 image: '/images/apps/Spookling.png'
 imageAlt: 'Spookling app icon showing a friendly ghost in a witch hat on purple'
 accent: '#7138e8'
-technologies: ['Swift', 'SwiftUI', 'Swift Package Manager', 'SSE', 'EventKit', 'Tool calling']
+technologies:
+  [
+    'Swift',
+    'SwiftUI',
+    'TypeScript',
+    'React',
+    'SSE',
+    'EventKit',
+    'AppSync',
+    'Lambda',
+    'DynamoDB',
+    'OpenSearch',
+  ]
 outcomes:
+  - value: '3 surfaces'
+    label: 'iOS, web, and backend'
   - value: 'Real-time'
-    label: 'streamed AI responses'
-  - value: 'Native'
-    label: 'calendar and reminder actions'
+    label: 'streamed AI and workspace chat'
 challenges:
-  - 'Keep streamed model output responsive while maintaining predictable UI state.'
-  - 'Translate untrusted, evolving tool-call payloads into safe native actions.'
-  - 'Keep a fast-moving AI product modular enough for multiple engineers to extend.'
+  - 'Keep streamed model output responsive while maintaining predictable state across native and web clients.'
+  - 'Translate evolving tool-call payloads into safe native actions and reliable third-party integrations.'
+  - 'Add searchable workspace communication without exposing conversations across access boundaries.'
 decisions:
-  - 'Separated transport, conversation state, tool decoding, and Apple-platform integrations into focused Swift packages.'
-  - 'Used SSE for progressive response delivery instead of waiting for a complete model result.'
-  - 'Mapped tool calls through typed boundaries before they reached EventKit.'
+  - 'Used SSE for progressive AI responses and mapped tool calls through typed boundaries before EventKit actions.'
+  - 'Built workspace and direct-message APIs on AppSync, Lambda, and DynamoDB with threads, mentions, and file indexes.'
+  - 'Implemented OpenSearch Serverless indexing, highlights, and conversation-level access control.'
+  - 'Added Buffer and Google connection flows, Composio tools, assistant history, booking APIs, and billing fixes.'
 links:
   - label: 'View on the App Store'
     url: 'https://apps.apple.com/us/app/id6759097441'
-attribution: 'Built at Sellou. Details shown here are limited to public résumé information.'
+attribution: 'Built at Sellou. Claims are limited to Kirlos Yousef’s documented contributions.'
 ---
 
-## Product context
+## Product problem
 
-Spookling brings agentic AI into a native iOS experience. The important product challenge was not simply displaying model output; it was making a streaming, tool-using system feel dependable inside the interaction patterns people already understand on iPhone.
+Spookling brings always-available AI into chat, calendar workflows, coding, collaboration, and connected services. The work required more than a chat interface: native actions, progressive responses, workspace communication, search, external connections, and backend product flows had to behave as one dependable system.
 
 ## Engineering approach
 
-The app was organized as a modular Swift package architecture so networking, streaming, conversation state, and native integrations could evolve independently. Server-Sent Events deliver partial responses as they arrive. Tool calls are decoded into typed operations before they can request calendar or reminder changes through EventKit.
+On iOS, SSE delivers partial model responses and typed tool boundaries protect native EventKit actions. The web product extends those workflows into browser-based workspaces and coding. Backend contributions added workspace and direct-message APIs, conversation files, OpenSearch-powered search, OAuth connections, assistant history, public booking, and billing fixes on AWS services.
 
-## What the work demonstrates
+## Scope and evidence
 
-This project combines product judgment with applied AI engineering: responsive streaming, explicit integration boundaries, native platform behavior, and an architecture a team can continue to extend.
+The broader Spookling role began in August 2025. The documented backend contribution window covers July through September 2026. This case study describes implemented application features and infrastructure; it does not claim responsibility for model training or the entire product platform.

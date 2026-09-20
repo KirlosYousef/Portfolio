@@ -1,10 +1,13 @@
 ---
 title: 'Sellou — Video Commerce'
 shortTitle: 'Sellou'
-order: 1
+order: 3
+tracks: ['ios']
+priority:
+  ios: 1
 eyebrow: 'Client product · Video commerce'
-role: 'iOS Tech Lead'
-period: '2025 — Present'
+role: 'Senior iOS Engineer / iOS Tech Lead'
+period: '02/2025 — 08/2025'
 platforms: ['iOS']
 summary: 'A video-first commerce product rebuilt around faster playback, a smaller application footprint, and dependable navigation across every launch state.'
 contribution: 'Led iOS technical direction, rebuilt the AVKit and HLS playback layer, introduced On-Demand Resources, and designed one routing system for links and notifications.'

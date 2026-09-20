@@ -11,9 +11,12 @@ interface Props {
 }
 
 const { src, alt, kind = 'icon', loading = 'lazy', class: className } = Astro.props;
-const assets = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpg,jpeg,png}', {
-  eager: true,
-});
+const assets = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/**/*.{jpg,jpeg,png,webp}',
+  {
+    eager: true,
+  },
+);
 const assetKey = src.replace('/images/', '/src/assets/');
 const asset = assets[assetKey]?.default;
 

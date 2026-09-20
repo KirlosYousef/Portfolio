@@ -6,8 +6,8 @@
   <text x="1040" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="70" font-weight="700" fill="#fffdf9">KY</text>
   <path d="M80 94h88" stroke="#141518"/>
   <text x="80" y="170" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="3" fill="#3157ff">KIRLOS YOUSEF</text>
-  <text x="80" y="290" font-family="Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-4" fill="#141518">Senior iOS Engineer.</text>
-  <text x="80" y="375" font-family="Georgia, serif" font-size="76" font-style="italic" fill="#3157ff">Technical lead.</text>
-  <text x="80" y="490" font-family="Arial, sans-serif" font-size="25" fill="#5f625f">Reliable products · Clear architecture · Production delivery</text>
+  <text x="80" y="290" font-family="Arial, sans-serif" font-size="72" font-weight="700" letter-spacing="-4" fill="#141518">Senior Software Engineer.</text>
+  <text x="80" y="375" font-family="Georgia, serif" font-size="68" font-style="italic" fill="#3157ff">iOS &amp; AI applications.</text>
+  <text x="80" y="490" font-family="Arial, sans-serif" font-size="25" fill="#5f625f">Product engineering · Evaluation · Reliability</text>
   <text x="80" y="555" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#141518">kirlosyousef.com</text>
 </svg>

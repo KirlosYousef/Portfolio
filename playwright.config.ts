@@ -8,7 +8,7 @@ export default defineConfig({
   ...(process.env.CI ? { workers: 2 } : {}),
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4321',
+    baseURL: 'http://127.0.0.1:4322',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -19,8 +19,8 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['iPhone 13'] } },
   ],
   webServer: {
-    command: 'ASTRO_TELEMETRY_DISABLED=1 ./node_modules/.bin/astro preview --host 127.0.0.1',
-    port: 4321,
+    command: 'python3 -m http.server 4322 --bind 127.0.0.1 --directory dist',
+    port: 4322,
     reuseExistingServer: !process.env.CI,
   },
 });

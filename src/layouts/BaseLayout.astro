@@ -15,6 +15,7 @@ interface Props {
   image?: string;
   type?: 'website' | 'article';
   schema?: Record<string, unknown>;
+  pageTrack?: 'ai' | 'ios';
 }
 
 const {
@@ -23,6 +24,7 @@ const {
   image = '/og-image.png',
   type = 'website',
   schema,
+  pageTrack,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -31,12 +33,21 @@ const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: profile.name,
-  jobTitle: 'Senior iOS Engineer and Tech Lead',
+  jobTitle: 'Senior Software Engineer',
   url: profile.website,
   email: `mailto:${profile.email}`,
   address: { '@type': 'PostalAddress', addressCountry: 'Egypt' },
   sameAs: [profile.linkedin, profile.github],
-  knowsAbout: ['iOS', 'Swift', 'SwiftUI', 'UIKit', 'Swift Concurrency', 'watchOS', 'Applied AI'],
+  knowsAbout: [
+    'iOS',
+    'Swift',
+    'SwiftUI',
+    'Python',
+    'FastAPI',
+    'LLM applications',
+    'Retrieval-augmented generation',
+    'Software evaluation',
+  ],
 };
 ---
 
@@ -71,7 +82,7 @@ const personSchema = {
     {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
     <ClientRouter />
   </head>
-  <body>
+  <body data-page-track={pageTrack}>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <Header />
     <main id="main-content">
@@ -184,6 +195,63 @@ const personSchema = {
             { once: true },
           );
         }
+
+        if (!reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+          document.querySelectorAll<HTMLElement>('[data-depth]').forEach((surface) => {
+            surface.addEventListener(
+              'pointermove',
+              (event) => {
+                const bounds = surface.getBoundingClientRect();
+                surface.style.setProperty(
+                  '--depth-x',
+                  String((event.clientX - bounds.left) / bounds.width - 0.5),
+                );
+                surface.style.setProperty(
+                  '--depth-y',
+                  String((event.clientY - bounds.top) / bounds.height - 0.5),
+                );
+              },
+              { passive: true, signal },
+            );
+            surface.addEventListener(
+              'pointerleave',
+              () => {
+                surface.style.setProperty('--depth-x', '0');
+                surface.style.setProperty('--depth-y', '0');
+              },
+              { signal },
+            );
+          });
+        }
+
+        const filterGroup = document.querySelector<HTMLElement>('[data-work-filters]');
+        const projectCards = document.querySelectorAll<HTMLElement>('[data-project-card]');
+        const filterStatus = document.querySelector<HTMLElement>('[data-filter-status]');
+        filterGroup?.querySelectorAll<HTMLButtonElement>('[data-work-filter]').forEach((button) => {
+          button.addEventListener(
+            'click',
+            () => {
+              const filter = button.dataset.workFilter ?? 'all';
+              let visibleCount = 0;
+              filterGroup
+                .querySelectorAll<HTMLButtonElement>('[data-work-filter]')
+                .forEach((candidate) =>
+                  candidate.setAttribute('aria-pressed', String(candidate === button)),
+                );
+              projectCards.forEach((card) => {
+                const visible =
+                  filter === 'all' || card.dataset.tracks?.split(' ').includes(filter);
+                card.hidden = !visible;
+                if (visible) visibleCount += 1;
+              });
+              if (filterStatus) {
+                const label = filter === 'all' ? 'all' : filter.toUpperCase();
+                filterStatus.textContent = `Showing ${visibleCount} ${label} case studies`;
+              }
+            },
+            { signal },
+          );
+        });
       };
 
       document.addEventListener('astro:page-load', setupPortfolioUI);

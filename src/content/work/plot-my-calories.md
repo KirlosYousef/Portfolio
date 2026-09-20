@@ -1,7 +1,10 @@
 ---
 title: 'Plot My Calories — AI Food Scanner'
 shortTitle: 'Plot My Calories'
-order: 5
+order: 6
+tracks: ['ai', 'ios']
+priority:
+  ai: 4
 eyebrow: 'Applied AI · Health & fitness'
 role: 'Lead iOS Engineer'
 period: '2025'
