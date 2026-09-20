@@ -100,6 +100,100 @@ test('mobile navigation opens, closes, and exposes both tracks', async ({ page }
   await expect(menu).toHaveAttribute('aria-expanded', 'false');
 });
 
+test('phone layouts fit compact widths and retain usable navigation and filters', async ({
+  page,
+}, testInfo) => {
+  const routes = [
+    '/',
+    '/ai/',
+    '/ios/',
+    '/work/',
+    '/work/receipty/',
+    '/work/spookling/',
+    '/work/sellou/',
+  ];
+
+  for (const width of [320, 375, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+
+    for (const route of routes) {
+      await page.goto(route);
+      await expect(page.locator('h1')).toBeVisible();
+      const layout = await page.evaluate(() => {
+        const viewport = document.documentElement.clientWidth;
+        const offenders = Array.from(document.querySelectorAll<HTMLElement>('body *'))
+          .map((element) => {
+            const rect = element.getBoundingClientRect();
+            return {
+              element: `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ''}${
+                typeof element.className === 'string' && element.className
+                  ? `.${element.className.trim().replace(/\s+/g, '.')}`
+                  : ''
+              }`,
+              left: Math.round(rect.left),
+              right: Math.round(rect.right),
+              width: Math.round(rect.width),
+            };
+          })
+          .filter((element) => element.right > viewport + 1)
+          .sort((a, b) => b.right - a.right)
+          .slice(0, 8);
+        return {
+          viewport,
+          content: document.documentElement.scrollWidth,
+          offenders,
+        };
+      });
+      if (width === 320) {
+        await page.screenshot({
+          path: testInfo.outputPath(`phone-${route.replaceAll('/', '-') || 'home'}-${width}.png`),
+        });
+      }
+      expect(
+        layout.content,
+        `${route} overflows at ${width}px: ${JSON.stringify(layout.offenders)}`,
+      ).toBeLessThanOrEqual(layout.viewport);
+    }
+
+    await page.goto('/work/');
+    const filters = page.locator('[data-work-filter]');
+    for (const filter of await filters.all()) {
+      expect(
+        await filter.evaluate((button) => button.getBoundingClientRect().height),
+      ).toBeGreaterThanOrEqual(44);
+    }
+    await page.getByRole('button', { name: 'AI engineering' }).click();
+    await expect(page.locator('[data-project-card]:visible')).toHaveCount(4);
+    await expect(page.locator('[data-filter-status]')).toContainText('Showing 4 AI case studies');
+
+    for (const [route, oppositeTrack] of [
+      ['/ai/', '/ios/'],
+      ['/ios/', '/ai/'],
+    ] as const) {
+      await page.goto(route);
+      const menu = page.getByRole('button', { name: 'Toggle navigation' });
+      expect(
+        await menu.evaluate((button) => button.getBoundingClientRect().height),
+      ).toBeGreaterThanOrEqual(44);
+      await menu.click();
+      await expect(menu).toHaveAttribute('aria-expanded', 'true');
+      await expect(page.getByRole('link', { name: 'Work', exact: true })).toBeVisible();
+      await expect(page.locator(`a[href="${oppositeTrack}"]`)).toHaveCount(0);
+      await page.getByRole('link', { name: 'Work', exact: true }).click();
+      await expect(page).toHaveURL(/\/work\/$/);
+      await expect(page.getByRole('button', { name: 'Toggle navigation' })).toHaveAttribute(
+        'aria-expanded',
+        'false',
+      );
+    }
+
+    const footerTargets = await page
+      .locator('.site-footer nav a')
+      .evaluateAll((links) => links.map((link) => link.getBoundingClientRect().height));
+    expect(footerTargets.every((height) => height >= 44)).toBe(true);
+  }
+});
+
 test('mobile reveal motion is disabled', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto('/');

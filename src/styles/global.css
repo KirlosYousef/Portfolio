@@ -156,8 +156,8 @@ h3 {
 .skip-link {
   position: fixed;
   z-index: 1000;
-  top: 0.75rem;
-  left: 0.75rem;
+  top: max(0.75rem, env(safe-area-inset-top));
+  left: max(0.75rem, env(safe-area-inset-left));
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   background: var(--ink);
@@ -372,6 +372,7 @@ a:hover .text-link svg,
 /* Hero */
 .hero {
   position: relative;
+  overflow-x: clip;
   min-height: min(62rem, 100svh);
   padding-top: clamp(9rem, 15vh, 12rem);
   padding-bottom: clamp(4rem, 8vh, 7rem);
@@ -1470,7 +1471,17 @@ a:hover .text-link svg,
 
   .container,
   .container-wide {
-    width: min(calc(100% - 1.25rem), var(--container));
+    width: auto;
+    margin-inline: max(0.625rem, env(safe-area-inset-left))
+      max(0.625rem, env(safe-area-inset-right));
+  }
+
+  .container {
+    max-width: var(--container);
+  }
+
+  .container-wide {
+    max-width: var(--container-wide);
   }
 
   [data-reveal] {
@@ -1479,7 +1490,8 @@ a:hover .text-link svg,
   }
 
   .site-header__inner {
-    min-height: 5rem;
+    min-height: calc(5rem + env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top);
   }
 
   .wordmark__name {
@@ -1508,7 +1520,10 @@ a:hover .text-link svg,
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
-    padding: 5.5rem 1.5rem 2rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: calc(5.5rem + env(safe-area-inset-top)) max(1.5rem, env(safe-area-inset-right))
+      calc(2rem + env(safe-area-inset-bottom)) max(1.5rem, env(safe-area-inset-left));
     background: var(--canvas);
     gap: 0;
     inset: 0;
@@ -1553,7 +1568,7 @@ a:hover .text-link svg,
   }
 
   .hero h1 {
-    font-size: clamp(3rem, 15.5vw, 5.5rem);
+    font-size: clamp(2.35rem, 11.75vw, 4rem);
   }
 
   .hero__lead {
@@ -1678,6 +1693,17 @@ a:hover .text-link svg,
     grid-template-columns: 1fr 1fr;
   }
 
+  .site-footer {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+
+  .site-footer nav a {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    font-size: 0.875rem;
+  }
+
   .site-footer__inner > div:first-child {
     grid-column: 1 / -1;
   }
@@ -1692,7 +1718,7 @@ a:hover .text-link svg,
   }
 
   .page-hero h1 {
-    font-size: clamp(3.2rem, 15vw, 5.5rem);
+    font-size: clamp(2.35rem, 11.75vw, 4rem);
   }
 
   .product-highlight__media {
@@ -1701,6 +1727,10 @@ a:hover .text-link svg,
 
   .case-hero {
     padding-top: 8rem;
+  }
+
+  .case-hero h1 {
+    font-size: clamp(2.35rem, 11.75vw, 4rem);
   }
 
   .case-hero__meta {
@@ -2076,7 +2106,7 @@ body[data-page-track='ios'] {
   }
 
   .track-hero h1 {
-    font-size: clamp(3rem, 14vw, 5.2rem);
+    font-size: clamp(2.35rem, 11.75vw, 4rem);
   }
 
   .track-hero__aside {
