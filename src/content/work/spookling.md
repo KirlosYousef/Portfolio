@@ -43,6 +43,8 @@ decisions:
   - 'Implemented OpenSearch Serverless indexing, highlights, and conversation-level access control.'
   - 'Added Buffer and Google connection flows, Composio tools, assistant history, booking APIs, and billing fixes.'
 links:
+  - label: 'Open the web app'
+    url: 'https://app.spookling.com/home'
   - label: 'View on the App Store'
     url: 'https://apps.apple.com/us/app/id6759097441'
 attribution: 'Built at Sellou. Claims are limited to Kirlos Yousef’s documented contributions.'
