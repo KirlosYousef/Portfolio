@@ -32,7 +32,7 @@ export const experience = [
   {
     id: 'sellou-product-engineer',
     period: '08/2025 — Present',
-    title: 'Lead Product Engineer — AI Applications',
+    title: 'Lead Product Engineer',
     company: 'Sellou',
     descriptor: 'AI Product Studio',
     location: 'Utah, US · Remote',
