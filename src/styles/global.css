@@ -614,8 +614,7 @@ a:hover .text-link svg,
     padding: 6rem 1.5rem 2rem;
     background:
       radial-gradient(30rem 30rem at 80% 10%, rgb(168 152 255 / 18%), transparent 60%),
-      radial-gradient(30rem 30rem at 10% 90%, rgb(98 228 255 / 12%), transparent 60%),
-      var(--bg);
+      radial-gradient(30rem 30rem at 10% 90%, rgb(98 228 255 / 12%), transparent 60%), var(--bg);
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
