@@ -1,0 +1,13 @@
+---
+interface Props {
+  variant?: 'brand' | 'ios' | 'accent';
+  field?: boolean;
+}
+const { variant = 'brand', field = true } = Astro.props;
+---
+
+<div class:list={['aurora', variant !== 'brand' && `aurora--${variant}`]} aria-hidden="true">
+  <span></span><span></span><span></span>
+</div>
+<div class="grid-lines" aria-hidden="true"></div>
+{field && <canvas class="signal-field" data-signal-field aria-hidden="true" />}

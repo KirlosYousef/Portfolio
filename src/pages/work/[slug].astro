@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import ArrowIcon from '@/components/ArrowIcon.astro';
 import AppImage from '@/components/AppImage.astro';
+import HeroBackdrop from '@/components/HeroBackdrop.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
@@ -23,6 +24,7 @@ interface Props {
 const { entry, next } = Astro.props;
 const { Content } = await render(entry);
 const data = entry.data;
+const [titleMain = data.title, titleSub] = data.title.split(' — ');
 const projectSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -42,14 +44,36 @@ const projectSchema = {
   schema={projectSchema}
 >
   <section class="case-hero" style={`--case-accent: ${data.accent}`}>
+    <HeroBackdrop variant="accent" field={false} />
     <div class="container-wide">
       <a class="text-link case-hero__back" href="/work/"
         ><span aria-hidden="true">←</span> All work</a
       >
       <div class="case-hero__grid">
-        <div data-reveal>
+        <div>
           <p class="eyebrow">{data.eyebrow}</p>
-          <h1>{data.title}</h1>
+          <h1 class="kinetic">
+            {
+              titleMain.split(' ').map((word, index) => (
+                <>
+                  <span class="word" style={`--i: ${index}`}>
+                    {word}
+                  </span>{' '}
+                </>
+              ))
+            }
+            {
+              titleSub && (
+                <span
+                  class="case-hero__subtitle word"
+                  style={`--i: ${titleMain.split(' ').length}`}
+                >
+                  <span class="sr-only">— </span>
+                  {titleSub}
+                </span>
+              )
+            }
+          </h1>
           <p class="case-hero__summary">{data.summary}</p>
           <dl class="case-hero__meta">
             <div><dt>Role</dt><dd>{data.role}</dd></div>
@@ -57,15 +81,15 @@ const projectSchema = {
             <div><dt>Platforms</dt><dd>{data.platforms.join(' · ')}</dd></div>
           </dl>
         </div>
-        <div class="case-artwork" transition:name={`project-image-${entry.id}`} data-reveal>
+        <div class="case-artwork" transition:name={`project-image-${entry.id}`}>
           <AppImage src={data.image} alt={data.imageAlt} loading="eager" />
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section section--night">
-    <div class="container-wide case-proof">
+  <section class="section case-proof-section" style={`--case-accent: ${data.accent}`}>
+    <div class="container-wide case-proof" data-reveal>
       <div class="case-proof__item case-proof__item--role">
         <span>Contribution</span>
         <p>{data.contribution}</p>
@@ -81,7 +105,7 @@ const projectSchema = {
     </div>
   </section>
 
-  <section class="section section--surface">
+  <section class="section section--raised" style={`--case-accent: ${data.accent}`}>
     <div class="container case-body">
       <aside class="case-body__aside" data-reveal>
         <h2>Technology</h2>
@@ -103,11 +127,11 @@ const projectSchema = {
     </div>
 
     <div class="container case-lists">
-      <section class="case-list" data-reveal>
+      <section class="case-list" data-reveal data-spotlight>
         <h2>Engineering challenges</h2>
         <ol>{data.challenges.map((challenge) => <li>{challenge}</li>)}</ol>
       </section>
-      <section class="case-list" data-reveal>
+      <section class="case-list" data-reveal data-spotlight>
         <h2>Key decisions</h2>
         <ol>{data.decisions.map((decision) => <li>{decision}</li>)}</ol>
       </section>
@@ -116,12 +140,20 @@ const projectSchema = {
 
   <section class="section">
     <div class="container-wide">
-      <a class="next-project" href={`/work/${next.id}/`}>
+      <a
+        class="next-project"
+        href={`/work/${next.id}/`}
+        style={`--next-accent: ${next.data.accent}`}
+        data-spotlight
+      >
         <div>
           <p class="eyebrow">Next case study</p>
           <h2>{next.data.shortTitle}</h2>
         </div>
-        <ArrowIcon />
+        <div class="next-project__icon">
+          <AppImage src={next.data.image} alt="" />
+          <ArrowIcon />
+        </div>
       </a>
     </div>
   </section>

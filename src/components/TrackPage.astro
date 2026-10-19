@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import ArrowIcon from '@/components/ArrowIcon.astro';
+import HeroBackdrop from '@/components/HeroBackdrop.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import SectionIntro from '@/components/SectionIntro.astro';
 import { experience, profile, skillsFor, trackContent } from '@/data/profile';
@@ -30,14 +31,30 @@ const pageTitle =
   pageTrack={track}
 >
   <section class:list={['track-hero', `track-hero--${track}`]}>
+    <HeroBackdrop variant={track === 'ios' ? 'ios' : 'brand'} />
+    <span class="track-hero__backdrop" aria-hidden="true">{track === 'ai' ? 'AI' : 'iOS'}</span>
     <div class="container-wide track-hero__grid">
-      <div data-reveal>
+      <div>
         <p class="eyebrow">{content.label}</p>
-        <h1>{content.title}</h1>
-        <p class="track-hero__lead">{content.description}</p>
+        <h1 class="kinetic">
+          {
+            content.title.split(' ').map((word, index) => (
+              <>
+                <span class="word" style={`--i: ${index}`}>
+                  {word}
+                </span>{' '}
+              </>
+            ))
+          }
+        </h1>
+        <p class="track-hero__lead hero__lead">{content.description}</p>
         <div class="hero__actions">
-          <a class="button" href="#featured-work">Explore relevant work <ArrowIcon /></a>
-          <a class="button button--ghost" href={content.resume} target="_blank">View résumé</a>
+          <a class="button" href="#featured-work" data-magnetic
+            >Explore relevant work <ArrowIcon /></a
+          >
+          <a class="button button--ghost" href={content.resume} target="_blank" data-magnetic
+            >View résumé</a
+          >
         </div>
       </div>
       <aside class="track-hero__aside" data-reveal>
@@ -57,7 +74,7 @@ const pageTitle =
       {
         content.proofPoints.map((point) => (
           <div class="proof-item" data-reveal>
-            <strong>{point.value}</strong>
+            <strong data-count>{point.value}</strong>
             <span>{point.label}</span>
           </div>
         ))
@@ -65,7 +82,7 @@ const pageTitle =
     </div>
   </section>
 
-  <section class="section section--night" id="featured-work">
+  <section class="section section--raised" id="featured-work">
     <div class="container-wide">
       <SectionIntro
         eyebrow={track === 'ai' ? 'AI evidence · Selected work' : 'iOS evidence · Selected work'}
@@ -75,9 +92,8 @@ const pageTitle =
         description={track === 'ai'
           ? 'Extraction, retrieval, streaming, native tools, and cloud product systems—each presented with the validation and limits needed to assess the work.'
           : 'Leadership, performance, offline behavior, payments, background execution, and multi-platform delivery—grounded in concrete product outcomes.'}
-        theme="dark"
       />
-      <div class="work-grid">
+      <div class="work-grid work-grid--bento">
         {
           projects
             .slice(0, 4)
@@ -98,7 +114,7 @@ const pageTitle =
         }
       </div>
       <div class="section-action" data-reveal>
-        <a class="button button--light" href="/work/"
+        <a class="button button--ghost" href="/work/" data-magnetic
           >Explore the complete work library <ArrowIcon /></a
         >
       </div>
@@ -116,10 +132,10 @@ const pageTitle =
           ? 'Tools are grouped by the systems they support, with project evidence taking priority over keyword volume.'
           : 'Apple-platform expertise is paired with architecture, testing, observability, and dependable team delivery.'}
       />
-      <div class="skills-grid">
+      <div class:list={['skills-grid', skills.length === 3 && 'skills-grid--3']}>
         {
           skills.map((group) => (
-            <article class="skill-group" data-reveal>
+            <article class="skill-group" data-reveal data-spotlight>
               <h3>{group.title}</h3>
               <ul>
                 {group.items.map((item) => (
@@ -133,7 +149,7 @@ const pageTitle =
     </div>
   </section>
 
-  <section class="section section--surface">
+  <section class="section section--raised">
     <div class="container experience-grid">
       <div class="experience-sticky" data-reveal>
         <p class="eyebrow">Professional experience</p>
@@ -178,31 +194,30 @@ const pageTitle =
 
   <section class="section">
     <div class="container-wide contact-panel" data-reveal>
-      <div class="contact-panel__content">
-        <p class="eyebrow">Roles and freelance projects</p>
-        <h2>
-          {
-            track === 'ai'
-              ? 'Building an AI product or looking for help with an AI project?'
-              : 'Building an iOS product or need experienced help on a project?'
-          }
-        </h2>
-        <p>
-          I’m open to relevant engineering roles and selected freelance projects. Based in Egypt and
-          available for remote work or relocation, I’d be glad to hear what you’re working on.
-        </p>
-        <div class="contact-panel__actions">
-          <a class="button button--light" href={`mailto:${profile.email}`}
-            >Start a conversation <ArrowIcon /></a
-          >
-          <a class="contact-panel__link" href={content.resume} target="_blank">Résumé ↗</a>
-          <a class="contact-panel__link" href={profile.linkedin} target="_blank" rel="noreferrer"
-            >LinkedIn ↗</a
-          >
-          <a class="contact-panel__link" href={profile.github} target="_blank" rel="noreferrer"
-            >GitHub ↗</a
-          >
-        </div>
+      <p class="eyebrow">Roles and freelance projects</p>
+      <h2>
+        {
+          track === 'ai'
+            ? 'Building an AI product or looking for help with an AI project?'
+            : 'Building an iOS product or need experienced help on a project?'
+        }
+      </h2>
+      <p>
+        I’m open to relevant engineering roles and selected freelance projects. Based in Egypt and
+        available for remote work or relocation, I’d be glad to hear what you’re working on.
+      </p>
+      <a class="contact-panel__email" href={`mailto:${profile.email}`}>{profile.email}</a>
+      <div class="contact-panel__actions">
+        <a class="button" href={`mailto:${profile.email}`} data-magnetic
+          >Start a conversation <ArrowIcon /></a
+        >
+        <a class="contact-panel__link" href={content.resume} target="_blank">Résumé ↗</a>
+        <a class="contact-panel__link" href={profile.linkedin} target="_blank" rel="noreferrer"
+          >LinkedIn ↗</a
+        >
+        <a class="contact-panel__link" href={profile.github} target="_blank" rel="noreferrer"
+          >GitHub ↗</a
+        >
       </div>
     </div>
   </section>

@@ -75,7 +75,7 @@ export const resumes = {
         period: '02/2025 – Present',
         roles: [
           {
-            title: 'Product Engineer – AI Applications',
+            title: 'Lead Product Engineer – AI Applications',
             period: '08/2025 – Present',
             bullets: [
               'Primary iOS and web engineer on Spookling, an AI workspace (~87% of iOS and ~76% of web commits)',
@@ -163,7 +163,7 @@ export const resumes = {
         period: '02/2025 – Present',
         roles: [
           {
-            title: 'Product Engineer – AI Applications',
+            title: 'Lead Product Engineer – AI Applications',
             period: '08/2025 – Present',
             bullets: [
               'Primary engineer on the Spookling iOS app (~87% of commits, ~51k Swift LOC): modular Swift package architecture, SSE-streamed AI responses, and model tool calls mapped through typed boundaries to EventKit actions',

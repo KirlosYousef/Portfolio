@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import AdditionalProducts from '@/components/AdditionalProducts.astro';
 import ArrowIcon from '@/components/ArrowIcon.astro';
+import HeroBackdrop from '@/components/HeroBackdrop.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import SectionIntro from '@/components/SectionIntro.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
@@ -14,12 +15,18 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
   description="Case studies across AI applications, iOS products, web systems, backend services, mobility, and independent product engineering."
 >
   <section class="page-hero">
+    <HeroBackdrop field={false} />
     <div class="container-wide page-hero__grid">
-      <div data-reveal>
+      <div>
         <p class="eyebrow">Work · 12 selected projects</p>
-        <h1>Selected work across <em>AI and iOS.</em></h1>
+        <h1 class="kinetic">
+          <span class="word" style="--i: 0">Selected</span>{' '}
+          <span class="word" style="--i: 1">work</span>{' '}
+          <span class="word" style="--i: 2">across</span>{' '}
+          <span class="word" style="--i: 3"><em>AI and iOS.</em></span>
+        </h1>
       </div>
-      <div class="page-hero__aside" data-reveal>
+      <div class="page-hero__aside hero__lead">
         <p>
           Browse case studies relevant to the role or project you’re considering. Each one explains
           my contribution, key engineering decisions, and measurable outcomes.
@@ -31,13 +38,12 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
     </div>
   </section>
 
-  <section class="section section--night">
+  <section class="section section--raised">
     <div class="container-wide">
       <SectionIntro
         eyebrow="Detailed case studies"
         title="Choose the evidence that matches your role."
         description="Filter by specialization or browse the complete collection. Employer work and independent products are identified in every case study."
-        theme="dark"
       />
       <div class="work-filters" aria-label="Filter case studies" data-work-filters>
         <button type="button" data-work-filter="all" aria-pressed="true">All work</button>
@@ -47,7 +53,7 @@ const featuredWork = (await getCollection('work')).sort((a, b) => a.data.order -
           Showing all {featuredWork.length} case studies
         </span>
       </div>
-      <div class="work-grid" data-work-grid>
+      <div class="work-grid work-grid--library" data-work-grid>
         {
           featuredWork.map((project) => (
             <ProjectCard

@@ -56,7 +56,7 @@ const personSchema = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f4f0e8" />
+    <meta name="theme-color" content="#06070a" />
     <meta name="description" content={description} />
     <meta name="author" content={profile.name} />
     <meta name="generator" content={Astro.generator} />
@@ -84,6 +84,8 @@ const personSchema = {
   </head>
   <body data-page-track={pageTrack}>
     <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <div class="cursor-glow" aria-hidden="true" data-cursor-glow transition:persist></div>
     <Header />
     <main id="main-content">
       <slot />
@@ -252,6 +254,271 @@ const personSchema = {
             { signal },
           );
         });
+
+        const finePointer = window.matchMedia('(pointer: fine)').matches;
+
+        // Spotlight surfaces follow the pointer.
+        if (finePointer) {
+          document.querySelectorAll<HTMLElement>('[data-spotlight]').forEach((surface) => {
+            surface.addEventListener(
+              'pointermove',
+              (event) => {
+                const bounds = surface.getBoundingClientRect();
+                surface.style.setProperty('--mx', `${event.clientX - bounds.left}px`);
+                surface.style.setProperty('--my', `${event.clientY - bounds.top}px`);
+              },
+              { passive: true, signal },
+            );
+          });
+        }
+
+        // Magnetic buttons.
+        if (finePointer && !reduceMotion) {
+          document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((button) => {
+            button.addEventListener(
+              'pointermove',
+              (event) => {
+                const bounds = button.getBoundingClientRect();
+                const x = event.clientX - bounds.left - bounds.width / 2;
+                const y = event.clientY - bounds.top - bounds.height / 2;
+                button.style.transform = `translate(${x * 0.18}px, ${y * 0.28}px)`;
+              },
+              { passive: true, signal },
+            );
+            button.addEventListener(
+              'pointerleave',
+              () => {
+                button.style.transform = '';
+              },
+              { signal },
+            );
+          });
+        }
+
+        // Cursor glow.
+        const glow = document.querySelector<HTMLElement>('[data-cursor-glow]');
+        if (glow && finePointer && !reduceMotion) {
+          let targetX = window.innerWidth / 2;
+          let targetY = window.innerHeight / 3;
+          let currentX = targetX;
+          let currentY = targetY;
+          let glowFrame = 0;
+          const moveGlow = () => {
+            currentX += (targetX - currentX) * 0.14;
+            currentY += (targetY - currentY) * 0.14;
+            glow.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+            glowFrame =
+              Math.abs(targetX - currentX) + Math.abs(targetY - currentY) > 0.5
+                ? window.requestAnimationFrame(moveGlow)
+                : 0;
+          };
+          window.addEventListener(
+            'pointermove',
+            (event) => {
+              targetX = event.clientX;
+              targetY = event.clientY;
+              glow.setAttribute('data-active', '');
+              if (!glowFrame) glowFrame = window.requestAnimationFrame(moveGlow);
+            },
+            { passive: true, signal },
+          );
+          document.documentElement.addEventListener(
+            'pointerleave',
+            () => glow.removeAttribute('data-active'),
+            { signal },
+          );
+          signal.addEventListener('abort', () => window.cancelAnimationFrame(glowFrame), {
+            once: true,
+          });
+        }
+
+        // Count-up numbers keep their final text in the markup.
+        const counters = document.querySelectorAll<HTMLElement>('[data-count]');
+        if (!reduceMotion && 'IntersectionObserver' in window) {
+          const countObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                const element = entry.target as HTMLElement;
+                countObserver.unobserve(element);
+                const finalText = element.textContent ?? '';
+                const match = finalText.match(/^([^\d]*)([\d.]+)(.*)$/);
+                if (!match) return;
+                const [, prefix = '', digits = '0', suffix = ''] = match;
+                const target = Number(digits);
+                const decimals = (digits.split('.')[1] ?? '').length;
+                const started = performance.now();
+                const duration = 1400;
+                const tick = (now: number) => {
+                  const progress = Math.min((now - started) / duration, 1);
+                  const eased = 1 - Math.pow(1 - progress, 4);
+                  element.textContent =
+                    progress < 1
+                      ? `${prefix}${(target * eased).toFixed(decimals)}${suffix}`
+                      : finalText;
+                  if (progress < 1 && !signal.aborted) window.requestAnimationFrame(tick);
+                };
+                window.requestAnimationFrame(tick);
+              });
+            },
+            { threshold: 0.6 },
+          );
+          signal.addEventListener('abort', () => countObserver.disconnect(), { once: true });
+          counters.forEach((counter) => countObserver.observe(counter));
+        }
+
+        // Local Cairo time.
+        const clocks = document.querySelectorAll<HTMLTimeElement>('[data-clock]');
+        if (clocks.length) {
+          const formatter = new Intl.DateTimeFormat('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Africa/Cairo',
+          });
+          const renderClock = () =>
+            clocks.forEach((clock) => {
+              clock.textContent = formatter.format(new Date());
+            });
+          renderClock();
+          const clockTimer = window.setInterval(renderClock, 30_000);
+          signal.addEventListener('abort', () => window.clearInterval(clockTimer), { once: true });
+        }
+
+        // Signal field: a dot lattice that bends around the pointer.
+        const canvas = document.querySelector<HTMLCanvasElement>('[data-signal-field]');
+        const context = canvas?.getContext('2d');
+        if (canvas && context) {
+          const host = canvas.parentElement as HTMLElement;
+          const trackColors: Record<string, [number, number, number]> = {
+            ai: [168, 152, 255],
+            ios: [255, 190, 102],
+          };
+          const [red, green, blue] = trackColors[document.body.dataset.pageTrack ?? ''] ?? [
+            170, 190, 255,
+          ];
+          const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+          let width = 0;
+          let height = 0;
+          let gap = 30;
+          let pointerFieldX = -9999;
+          let pointerFieldY = -9999;
+          let easedX = -9999;
+          let easedY = -9999;
+          let fieldFrame = 0;
+          let inView = true;
+          let lastDraw = 0;
+
+          const resize = () => {
+            const bounds = host.getBoundingClientRect();
+            width = bounds.width;
+            height = bounds.height;
+            gap = width < 700 ? 26 : 32;
+            canvas.width = Math.round(width * ratio);
+            canvas.height = Math.round(height * ratio);
+            context.setTransform(ratio, 0, 0, ratio, 0, 0);
+          };
+
+          const draw = (time: number) => {
+            context.clearRect(0, 0, width, height);
+            context.fillStyle = `rgb(${red} ${green} ${blue})`;
+            const t = time * 0.00035;
+            const radius = 170;
+            for (let x = gap / 2; x < width; x += gap) {
+              for (let y = gap / 2; y < height; y += gap) {
+                const dx = x - easedX;
+                const dy = y - easedY;
+                const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+                const influence = Math.exp(-(distance * distance) / (2 * radius * radius));
+                const wave = Math.sin(x * 0.011 + t * 2) * Math.cos(y * 0.013 - t * 1.6);
+                const push = influence * 22;
+                const px = x + (dx / distance) * push;
+                const py = y + (dy / distance) * push + wave * 3;
+                const size = 1 + influence * 2.2 + (wave + 1) * 0.25;
+                context.globalAlpha = Math.min(0.1 + influence * 0.8 + (wave + 1) * 0.07, 1);
+                context.fillRect(px - size / 2, py - size / 2, size, size);
+              }
+            }
+            context.globalAlpha = 1;
+          };
+
+          const loop = (time: number) => {
+            fieldFrame = 0;
+            if (!inView || document.hidden) return;
+            easedX += (pointerFieldX - easedX) * 0.08;
+            easedY += (pointerFieldY - easedY) * 0.08;
+            if (finePointer || time - lastDraw > 48) {
+              draw(time);
+              lastDraw = time;
+            }
+            fieldFrame = window.requestAnimationFrame(loop);
+          };
+
+          const start = () => {
+            resize();
+            if (reduceMotion) {
+              draw(0);
+              return;
+            }
+            if (!fieldFrame) fieldFrame = window.requestAnimationFrame(loop);
+          };
+
+          const idle =
+            'requestIdleCallback' in window
+              ? (callback: () => void) => window.requestIdleCallback(callback, { timeout: 1200 })
+              : (callback: () => void) => window.setTimeout(callback, 400);
+          idle(() => {
+            if (!signal.aborted) start();
+          });
+
+          window.addEventListener('resize', resize, { passive: true, signal });
+          if (finePointer) {
+            host.addEventListener(
+              'pointermove',
+              (event) => {
+                const bounds = host.getBoundingClientRect();
+                pointerFieldX = event.clientX - bounds.left;
+                pointerFieldY = event.clientY - bounds.top;
+                if (easedX < -9000) {
+                  easedX = pointerFieldX;
+                  easedY = pointerFieldY;
+                }
+              },
+              { passive: true, signal },
+            );
+            host.addEventListener(
+              'pointerleave',
+              () => {
+                pointerFieldX = -9999;
+                pointerFieldY = -9999;
+              },
+              { signal },
+            );
+          }
+          const fieldObserver = new IntersectionObserver(([entry]) => {
+            inView = entry?.isIntersecting ?? true;
+            if (inView && !reduceMotion && !fieldFrame && width) {
+              fieldFrame = window.requestAnimationFrame(loop);
+            }
+          });
+          fieldObserver.observe(host);
+          document.addEventListener(
+            'visibilitychange',
+            () => {
+              if (!document.hidden && inView && !reduceMotion && !fieldFrame && width) {
+                fieldFrame = window.requestAnimationFrame(loop);
+              }
+            },
+            { signal },
+          );
+          signal.addEventListener(
+            'abort',
+            () => {
+              fieldObserver.disconnect();
+              window.cancelAnimationFrame(fieldFrame);
+            },
+            { once: true },
+          );
+        }
       };
 
       document.addEventListener('astro:page-load', setupPortfolioUI);

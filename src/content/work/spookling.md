@@ -7,7 +7,7 @@ priority:
   general: 2
   ai: 3
 eyebrow: 'Product engineering · AI workspace'
-role: 'Product Engineer — AI Applications'
+role: 'Lead Product Engineer — AI Applications'
 period: '08/2025 — Present'
 platforms: ['iOS', 'Web', 'Backend']
 summary: 'An AI workspace spanning native chat, calendar tools, browser-based coding, collaboration, search, and connected services.'
