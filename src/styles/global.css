@@ -627,6 +627,8 @@ a:hover .text-link svg,
     opacity: 1;
     pointer-events: auto;
     visibility: visible;
+    /* Show at once on open; visibility only fades out on close. */
+    transition: opacity 0.4s var(--ease-soft);
   }
 
   .site-nav a:not(.button) {

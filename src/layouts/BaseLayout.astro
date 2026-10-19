@@ -407,6 +407,9 @@ const personSchema = {
           let fieldFrame = 0;
           let inView = true;
           let lastDraw = 0;
+          let lastPointerMove = 0;
+          // Touch devices get a static frame: no pointer to follow, and it saves battery.
+          const animate = finePointer && !reduceMotion;
 
           const resize = () => {
             const bounds = host.getBoundingClientRect();
@@ -416,6 +419,7 @@ const personSchema = {
             canvas.width = Math.round(width * ratio);
             canvas.height = Math.round(height * ratio);
             context.setTransform(ratio, 0, 0, ratio, 0, 0);
+            if (!animate) draw(0);
           };
 
           const draw = (time: number) => {
@@ -446,7 +450,9 @@ const personSchema = {
             if (!inView || document.hidden) return;
             easedX += (pointerFieldX - easedX) * 0.08;
             easedY += (pointerFieldY - easedY) * 0.08;
-            if (finePointer || time - lastDraw > 48) {
+            // Full rate while the pointer moves; 30fps for the idle wave; paused under the menu.
+            const interval = time - lastPointerMove < 2500 ? 0 : 33;
+            if (!document.body.classList.contains('menu-open') && time - lastDraw >= interval) {
               draw(time);
               lastDraw = time;
             }
@@ -455,10 +461,7 @@ const personSchema = {
 
           const start = () => {
             resize();
-            if (reduceMotion) {
-              draw(0);
-              return;
-            }
+            if (!animate) return;
             if (!fieldFrame) fieldFrame = window.requestAnimationFrame(loop);
           };
 
@@ -478,6 +481,7 @@ const personSchema = {
                 const bounds = host.getBoundingClientRect();
                 pointerFieldX = event.clientX - bounds.left;
                 pointerFieldY = event.clientY - bounds.top;
+                lastPointerMove = performance.now();
                 if (easedX < -9000) {
                   easedX = pointerFieldX;
                   easedY = pointerFieldY;
@@ -496,7 +500,7 @@ const personSchema = {
           }
           const fieldObserver = new IntersectionObserver(([entry]) => {
             inView = entry?.isIntersecting ?? true;
-            if (inView && !reduceMotion && !fieldFrame && width) {
+            if (inView && animate && !fieldFrame && width) {
               fieldFrame = window.requestAnimationFrame(loop);
             }
           });
@@ -504,7 +508,7 @@ const personSchema = {
           document.addEventListener(
             'visibilitychange',
             () => {
-              if (!document.hidden && inView && !reduceMotion && !fieldFrame && width) {
+              if (!document.hidden && inView && animate && !fieldFrame && width) {
                 fieldFrame = window.requestAnimationFrame(loop);
               }
             },

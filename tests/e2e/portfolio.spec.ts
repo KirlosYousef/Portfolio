@@ -103,6 +103,8 @@ test('mobile navigation opens, closes, and exposes both tracks', async ({ page }
 test('phone layouts fit compact widths and retain usable navigation and filters', async ({
   page,
 }, testInfo) => {
+  // Loads 21+ pages across three widths; slow CI runners need more than the 30s default.
+  test.setTimeout(120_000);
   const routes = [
     '/',
     '/ai/',
