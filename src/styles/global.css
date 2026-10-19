@@ -454,13 +454,25 @@ a:hover .text-link svg,
   justify-content: space-between;
   gap: 1rem;
   padding: 0.45rem 0.5rem 0.45rem 0.6rem;
+  position: relative;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgb(10 11 16 / 62%);
   box-shadow: 0 20px 60px rgb(0 0 0 / 35%);
+  isolation: isolate;
+  pointer-events: auto;
+}
+
+/* The blur lives on a pseudo-element: backdrop-filter on the pill itself would
+   make it the containing block for the fixed mobile menu (WebKit honours this). */
+.site-header__inner::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: rgb(10 11 16 / 62%);
+  content: '';
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
-  pointer-events: auto;
 }
 
 .wordmark {
@@ -603,7 +615,7 @@ a:hover .text-link svg,
     background:
       radial-gradient(30rem 30rem at 80% 10%, rgb(168 152 255 / 18%), transparent 60%),
       radial-gradient(30rem 30rem at 10% 90%, rgb(98 228 255 / 12%), transparent 60%),
-      rgb(6 7 10 / 97%);
+      var(--bg);
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
