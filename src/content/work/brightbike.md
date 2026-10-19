@@ -1,10 +1,10 @@
 ---
 title: 'BrightBike — Bike Share'
 shortTitle: 'BrightBike'
-order: 8
+order: 9
 tracks: ['ios']
 priority:
-  ios: 5
+  ios: 6
 eyebrow: 'Client product · Offline mobility'
 role: 'iOS Team Lead'
 period: '2024 — 2025'
@@ -31,7 +31,7 @@ decisions:
 links:
   - label: 'View on the App Store'
     url: 'https://apps.apple.com/gb/app/id1613184779'
-attribution: 'Delivered at Iomob for BrightBike. Only public résumé information is presented.'
+attribution: 'Delivered at Iomob for BrightBike. Details limited by NDA.'
 ---
 
 ## Product context

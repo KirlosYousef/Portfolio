@@ -1300,6 +1300,29 @@ a:hover .text-link svg,
   max-width: 47rem;
 }
 
+.prose table {
+  width: 100%;
+  margin: 1.25rem 0;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.prose th,
+.prose td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.prose pre {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+}
+
 .prose h2 {
   margin: 3.5rem 0 1.2rem;
   font-size: clamp(1.8rem, 3vw, 2.8rem);

@@ -23,7 +23,7 @@ export const proofPoints = [
   { value: '5+', label: 'years shipping production software' },
   { value: '5', label: 'engineers led' },
   { value: '99.9%+', label: 'crash-free delivery' },
-  { value: '3 surfaces', label: 'mobile, web, and backend ownership' },
+  { value: '11', label: 'App Store products shipped' },
 ] as const;
 
 type Highlight = { text: string; tracks: readonly Exclude<CareerTrack, 'general'>[] };
@@ -35,11 +35,11 @@ export const experience = [
     title: 'Product Engineer — AI Applications',
     company: 'Sellou',
     descriptor: 'AI Product Studio',
-    location: 'United States · Remote',
+    location: 'Utah, US · Remote',
     tracks: ['ai', 'ios'] as const,
     highlights: [
       {
-        text: "Built Spookling's iOS and web apps for AI chat, calendar workflows, and browser-based coding.",
+        text: 'Primary iOS and web engineer on Spookling, an AI workspace (~87% of iOS and ~76% of web commits): AI chat, calendar workflows, and browser-based coding.',
         tracks: ['ai', 'ios'],
       },
       {
@@ -58,15 +58,19 @@ export const experience = [
     title: 'Senior iOS Engineer / iOS Tech Lead',
     company: 'Sellou',
     descriptor: 'Consumer App Studio',
-    location: 'United States · Remote',
+    location: 'Utah, US · Remote',
     tracks: ['ios'] as const,
     highlights: [
       {
-        text: 'Progressed to leading the iOS team and introduced CI/CD workflows that cut release cycle time by 50%.',
+        text: 'Led the iOS team and mentored 2 engineers; introduced CI/CD workflows that cut release cycle time by 50%.',
         tracks: ['ios'],
       },
       {
         text: 'Cut playback startup by 40% with AVKit/HLS and initial download size by 20% with On-Demand Resources.',
+        tracks: ['ios'],
+      },
+      {
+        text: 'Built Plot My Calories end to end: meal photo to nutrition breakdown with OpenAI Vision and Swift Concurrency.',
         tracks: ['ios'],
       },
     ] satisfies readonly Highlight[],
@@ -85,7 +89,7 @@ export const experience = [
         tracks: ['ios'],
       },
       {
-        text: 'Added Stripe tokenization to LNER, cutting checkout below eight seconds and trip-planning latency by 35%.',
+        text: 'Added Stripe tokenization to LNER, cutting checkout below eight seconds, and reduced trip-planning latency by 35%.',
         tracks: ['ios'],
       },
     ] satisfies readonly Highlight[],
@@ -120,6 +124,9 @@ export const skillGroups = [
       'FastAPI',
       'Pydantic',
       'Structured outputs',
+      'Tool calling',
+      'LangGraph',
+      'MCP',
       'RAG',
       'PostgreSQL',
       'pgvector',
@@ -142,7 +149,7 @@ export const skillGroups = [
   },
   {
     title: 'Reliability, evaluation & delivery',
-    tracks: ['general', 'ai', 'ios'] as const,
+    tracks: ['general', 'ai'] as const,
     items: [
       'pytest',
       'XCTest',
@@ -176,10 +183,14 @@ export const skillGroups = [
       'Clean Architecture',
       'Swift Package Manager',
       'Offline-first sync',
+      'XCTest',
       'XCUITest',
+      'Snapshot testing',
       'Instruments',
       'LLDB',
+      'Xcode Cloud',
       'Datadog',
+      'CI/CD',
     ],
   },
 ] as const;
@@ -192,10 +203,10 @@ export const trackContent = {
       'I apply senior product engineering discipline to LLM systems: explicit failure states, reproducible evaluation, grounded retrieval, typed APIs, and production infrastructure across mobile, web, and backend.',
     resume: profile.resumes.ai,
     proofPoints: [
-      { value: '60/60', label: 'receipt, total, and date checks' },
-      { value: '69', label: 'labelled retrieval queries' },
-      { value: '4', label: 'retrieval strategies evaluated' },
-      { value: '80%', label: 'branch coverage gate' },
+      { value: '7', label: 'coding-agent tools monitored by AgentLookout' },
+      { value: '~87%', label: 'of Spookling iOS commits' },
+      { value: '~$0.0005', label: 'LLM cost per receipt, p95 3.4 s' },
+      { value: '178', label: 'tests behind a CI eval gate' },
     ],
   },
   ios: {

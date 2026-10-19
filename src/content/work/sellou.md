@@ -1,10 +1,10 @@
 ---
 title: 'Sellou — Video Commerce'
 shortTitle: 'Sellou'
-order: 3
+order: 4
 tracks: ['ios']
 priority:
-  ios: 1
+  ios: 2
 eyebrow: 'Client product · Video commerce'
 role: 'Senior iOS Engineer / iOS Tech Lead'
 period: '02/2025 — 08/2025'
@@ -20,9 +20,9 @@ outcomes:
   - value: '40% faster'
     label: 'video playback start time'
   - value: '20% smaller'
-    label: 'application bundle'
-  - value: '50% faster'
-    label: 'release cycles across the iOS portfolio'
+    label: 'initial download size'
+  - value: '50% shorter'
+    label: 'release cycle time across the iOS portfolio'
 challenges:
   - 'Make a video-first storefront feel immediate without allowing media assets to inflate the installed application.'
   - 'Keep navigation consistent when users arrive through deep links or notifications during cold launches and background operation.'
@@ -35,7 +35,7 @@ decisions:
 links:
   - label: 'View on the App Store'
     url: 'https://apps.apple.com/us/app/sellou-sell-with-video/id1548126433'
-attribution: 'Built at Sellou. Details shown here are limited to public résumé and App Store information.'
+attribution: 'Built at Sellou. Details limited by NDA.'
 ---
 
 ## Product context
