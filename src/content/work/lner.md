@@ -1,11 +1,10 @@
 ---
 title: 'LNER — Door to Door'
 shortTitle: 'LNER'
-order: 7
+order: 8
 tracks: ['ios']
 priority:
-  general: 4
-  ios: 2
+  ios: 3
 eyebrow: 'Client product · Mobility & payments'
 role: 'iOS Team Lead'
 period: '2024 — 2025'
@@ -32,7 +31,7 @@ decisions:
 links:
   - label: 'View on the App Store'
     url: 'https://apps.apple.com/us/app/id1521840052'
-attribution: 'Delivered at Iomob for LNER. Only public résumé information is presented.'
+attribution: 'Delivered at Iomob for LNER. Details limited by NDA.'
 ---
 
 ## Product context

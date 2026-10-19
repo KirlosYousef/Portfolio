@@ -1,17 +1,17 @@
 ---
 title: 'Spookling — AI Workspace'
 shortTitle: 'Spookling'
-order: 2
+order: 3
 tracks: ['ai', 'ios', 'web', 'backend']
 priority:
-  general: 1
-  ai: 2
+  general: 2
+  ai: 3
 eyebrow: 'Product engineering · AI workspace'
-role: 'Product Engineer — AI Applications'
+role: 'Lead Product Engineer'
 period: '08/2025 — Present'
 platforms: ['iOS', 'Web', 'Backend']
 summary: 'An AI workspace spanning native chat, calendar tools, browser-based coding, collaboration, search, and connected services.'
-contribution: 'Built across iOS and web, then expanded into AWS backend services for chat, search, integrations, history, booking, and billing.'
+contribution: 'Built across iOS and web, then expanded into AWS backend services for chat, search, integrations, history, booking, and billing fixes.'
 image: '/images/apps/Spookling.png'
 imageAlt: 'Spookling app icon showing a friendly ghost in a witch hat on purple'
 accent: '#7138e8'
@@ -29,10 +29,12 @@ technologies:
     'OpenSearch',
   ]
 outcomes:
-  - value: '3 surfaces'
-    label: 'iOS, web, and backend'
-  - value: 'Real-time'
-    label: 'streamed AI and workspace chat'
+  - value: '~87%'
+    label: 'of iOS app commits (272 of 311)'
+  - value: '~76%'
+    label: 'of web app commits (223 of 293)'
+  - value: '~51k'
+    label: 'lines of Swift in the iOS app'
 challenges:
   - 'Keep streamed model output responsive while maintaining predictable state across native and web clients.'
   - 'Translate evolving tool-call payloads into safe native actions and reliable third-party integrations.'
@@ -47,7 +49,7 @@ links:
     url: 'https://app.spookling.com/home'
   - label: 'View on the App Store'
     url: 'https://apps.apple.com/us/app/id6759097441'
-attribution: 'Built at Sellou. Claims are limited to Kirlos Yousef’s documented contributions.'
+attribution: 'Built at Sellou. Details limited by NDA.'
 ---
 
 ## Product problem
@@ -58,6 +60,6 @@ Spookling brings always-available AI into chat, calendar workflows, coding, coll
 
 On iOS, SSE delivers partial model responses and typed tool boundaries protect native EventKit actions. The web product extends those workflows into browser-based workspaces and coding. Backend contributions added workspace and direct-message APIs, conversation files, OpenSearch-powered search, OAuth connections, assistant history, public booking, and billing fixes on AWS services.
 
-## Scope and evidence
+## Ownership
 
-The broader Spookling role began in August 2025. The documented backend contribution window covers July through September 2026. This case study describes implemented application features and infrastructure; it does not claim responsibility for model training or the entire product platform.
+I was the primary engineer on the iOS app and the web app (about 87% and 76% of commits respectively) and built the AWS services behind chat, search and integrations. The case study describes shipped application features and infrastructure, not model training.

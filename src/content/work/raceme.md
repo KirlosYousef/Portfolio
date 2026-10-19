@@ -1,14 +1,14 @@
 ---
 title: 'RaceMe — Run with Friends'
 shortTitle: 'RaceMe'
-order: 4
+order: 5
 tracks: ['ios']
 priority:
-  general: 3
-  ios: 3
+  general: 4
+  ios: 4
 eyebrow: 'Independent product · Real-time fitness'
 role: 'Creator & iOS Engineer'
-period: '2020 — Present'
+period: '2019 — Present'
 platforms: ['iOS', 'watchOS']
 summary: 'A competitive social running app for live races, background tracking, Apple Watch telemetry, leaderboards, and lock-screen race progress.'
 contribution: 'Built the product across iPhone and Apple Watch, including real-time race synchronization and resilient background location tracking.'
@@ -18,10 +18,10 @@ accent: '#f1f1ee'
 technologies:
   ['Swift', 'Core Location', 'Firestore', 'BrainCloud RTT', 'WatchConnectivity', 'Live Activities']
 outcomes:
-  - value: '2 platforms'
-    label: 'iPhone and Apple Watch'
-  - value: 'Live'
-    label: 'race synchronization'
+  - value: '~70k'
+    label: 'lines of Swift, built solo since 2019'
+  - value: '369'
+    label: 'automated tests, localized in 4 languages'
 challenges:
   - 'Maintain useful race state when runners lock their phones or the operating system suspends work.'
   - 'Synchronize competition data with sufficiently low latency for a live head-to-head experience.'

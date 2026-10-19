@@ -1,12 +1,12 @@
 ---
 title: 'Plot My Calories — AI Food Scanner'
 shortTitle: 'Plot My Calories'
-order: 6
+order: 7
 tracks: ['ai', 'ios']
 priority:
-  ai: 4
+  ai: 5
 eyebrow: 'Applied AI · Health & fitness'
-role: 'Lead iOS Engineer'
+role: 'Senior iOS Engineer / iOS Tech Lead'
 period: '2025'
 platforms: ['iOS']
 summary: 'A camera-first nutrition product that uses vision-based AI to turn a meal photo into an immediately useful nutritional breakdown.'
@@ -31,7 +31,7 @@ decisions:
 links:
   - label: 'View on the App Store'
     url: 'https://apps.apple.com/us/app/id6752576373'
-attribution: 'Built at Sellou. Details shown here are limited to public résumé information.'
+attribution: 'Built at Sellou. Details limited by NDA.'
 ---
 
 ## Product context

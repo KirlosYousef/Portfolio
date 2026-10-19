@@ -11,7 +11,7 @@ const overviewActive = pathname === '/';
 <header class="site-header">
   <div class="site-header__inner container-wide">
     <a class="wordmark" href="/" aria-label="Kirlos Yousef, home">
-      <span>KY</span>
+      <span aria-hidden="true">KY</span>
       <span class="wordmark__name">Kirlos Yousef</span>
     </a>
 
@@ -43,7 +43,7 @@ const overviewActive = pathname === '/';
         )
       }
       <a href="/work/" aria-current={workActive ? 'page' : undefined}>Work</a>
-      <a class="button button--small button--ink" href={`mailto:${profile.email}`}>Let’s talk</a>
+      <a class="button button--small" href={`mailto:${profile.email}`} data-magnetic>Let’s talk</a>
     </nav>
   </div>
 </header>

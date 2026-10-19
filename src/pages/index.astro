@@ -2,58 +2,129 @@
 import { getCollection } from 'astro:content';
 import ArrowIcon from '@/components/ArrowIcon.astro';
 import AppImage from '@/components/AppImage.astro';
+import HeroBackdrop from '@/components/HeroBackdrop.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import SectionIntro from '@/components/SectionIntro.astro';
-import { experience, profile, proofPoints, skillsFor } from '@/data/profile';
+import { experience, profile, proofPoints, skillGroups, skillsFor } from '@/data/profile';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
 const featuredWork = (await getCollection('work'))
   .filter((project) => project.data.priority.general !== undefined)
   .sort((a, b) => (a.data.priority.general ?? 99) - (b.data.priority.general ?? 99));
 const capabilities = skillsFor('general');
+
+const titleWords: { text: string; em?: boolean }[] = [
+  { text: 'Senior' },
+  { text: 'software' },
+  { text: 'engineer' },
+  { text: 'building' },
+  { text: 'iOS products', em: true },
+  { text: 'and' },
+  { text: 'reliable' },
+  { text: 'AI applications.', em: true },
+];
+
+const orbit = [
+  {
+    ring: 1,
+    items: [
+      { src: '/images/apps/Receipty.png', angle: 20 },
+      { src: '/images/apps/Revera.jpg', angle: 200 },
+    ],
+  },
+  {
+    ring: 2,
+    items: [
+      { src: '/images/apps/Spookling.png', angle: 70 },
+      { src: '/images/apps/RaceMe.jpg', angle: 190 },
+      { src: '/images/apps/Sellou.jpg', angle: 310 },
+    ],
+  },
+  {
+    ring: 3,
+    items: [
+      { src: '/images/apps/AgentLookout.png', angle: 130 },
+      { src: '/images/apps/lner.jpg', angle: 250 },
+      { src: '/images/apps/PlotMyCalories.jpg', angle: 10 },
+    ],
+  },
+];
+
+// Alternate items across groups so neither specialization leads the ticker.
+const longestGroup = Math.max(...skillGroups.map((group) => group.items.length));
+const tickerItems = [
+  ...new Set(
+    Array.from({ length: longestGroup }, (_, index) =>
+      skillGroups.map((group) => group.items[index]),
+    )
+      .flat()
+      .filter((item): item is NonNullable<typeof item> => Boolean(item)),
+  ),
+];
 ---
 
 <BaseLayout>
   <section class="hero">
+    <HeroBackdrop />
     <div class="container-wide hero__grid">
-      <div class="hero__copy" data-reveal>
-        <p class="hero__availability">{profile.availability}</p>
-        <h1>
-          Senior software engineer building <em>iOS products</em> and reliable AI applications.
+      <div class="hero__copy">
+        <p class="status-chip">
+          <span class="status-chip__dot" aria-hidden="true"></span>{profile.availability}
+        </p>
+        <h1 class="hero__title">
+          {
+            titleWords.map((word, index) => (
+              <>
+                <span class="word" style={`--i: ${index}`}>
+                  {word.em ? <em>{word.text}</em> : word.text}
+                </span>{' '}
+              </>
+            ))
+          }
         </h1>
         <p class="hero__lead">{profile.introduction}</p>
         <div class="hero__actions">
-          <a class="button" href="/ai/">Explore AI Engineering <ArrowIcon /></a>
-          <a class="button button--ghost" href="/ios/">Explore iOS Engineering <ArrowIcon /></a>
-          <a class="hero__email" href={`mailto:${profile.email}`}>{profile.email}</a>
+          <a class="button button--track button--track-ai" href="/ai/" data-magnetic
+            ><span class="button__dot" aria-hidden="true"></span>Explore AI Engineering <ArrowIcon
+            /></a
+          >
+          <a class="button button--track button--track-ios" href="/ios/" data-magnetic
+            ><span class="button__dot" aria-hidden="true"></span>Explore iOS Engineering <ArrowIcon
+            /></a
+          >
         </div>
+        <a class="hero__email" href={`mailto:${profile.email}`}>{profile.email}</a>
       </div>
 
-      <div
-        class="constellation"
-        data-constellation
-        aria-label="Products spanning AI, iOS, web, and backend engineering"
-        data-reveal
-      >
-        <div class="app-orbit app-orbit--spookling">
-          <AppImage src="/images/apps/Spookling.png" alt="Spookling" loading="eager" />
+      <div class="orbit" data-constellation aria-hidden="true">
+        <div class="orbit__stage">
+          {
+            orbit.map((ring) => (
+              <div class={`orbit__ring orbit__ring--${ring.ring}`}>
+                {ring.items.map((item) => (
+                  <div class="orbit__item" style={`--a: ${item.angle}deg`}>
+                    <div class="orbit__icon">
+                      <AppImage src={item.src} alt="" loading="eager" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))
+          }
+          <div class="orbit__core"><span>iOS × AI</span></div>
         </div>
-        <div class="app-orbit app-orbit--receipty">
-          <AppImage src="/images/apps/Receipty.png" alt="Receipty" loading="eager" />
-        </div>
-        <div class="app-orbit app-orbit--raceme">
-          <AppImage src="/images/apps/RaceMe.jpg" alt="RaceMe" loading="eager" />
-        </div>
-        <div class="app-orbit app-orbit--revera">
-          <AppImage src="/images/apps/Revera.jpg" alt="Revera AI" loading="eager" />
-        </div>
-        <div class="app-orbit app-orbit--sellou">
-          <AppImage src="/images/apps/Sellou.jpg" alt="Sellou" loading="eager" />
-        </div>
-        <p class="constellation__label">
-          One engineering career across mobile, web, backend, and AI systems.
-        </p>
       </div>
+    </div>
+    <div class="container-wide hero__foot" aria-hidden="true">
+      <span><i class="scroll-cue"></i>Scroll to explore</span>
+      <span>Cairo · <time data-clock>local time</time></span>
+    </div>
+  </section>
+
+  <section class="ticker" aria-label="Core technologies">
+    <div class="ticker__track">
+      <ul class="ticker__list">{tickerItems.map((item) => <li>{item}</li>)}</ul>
+      <ul class="ticker__list" aria-hidden="true">{tickerItems.map((item) => <li>{item}</li>)}</ul>
     </div>
   </section>
 
@@ -62,7 +133,7 @@ const capabilities = skillsFor('general');
       {
         proofPoints.map((point) => (
           <div class="proof-item" data-reveal>
-            <strong>{point.value}</strong>
+            <strong data-count>{point.value}</strong>
             <span>{point.label}</span>
           </div>
         ))
@@ -73,38 +144,74 @@ const capabilities = skillsFor('general');
   <section class="section path-section" aria-labelledby="choose-path">
     <div class="container-wide">
       <SectionIntro
-        eyebrow="Selected work · AI and iOS"
+        eyebrow="Two specializations · One standard"
         title="Explore the work behind reliable digital products."
         description="Whether you’re hiring an engineer or looking for a freelance partner, explore selected AI and iOS work, the decisions behind it, and results delivered."
       />
       <div class="path-grid" id="choose-path">
-        <a class="path-card path-card--ai" href="/ai/" data-reveal>
-          <span class="path-card__number">01</span>
+        <a class="path-card path-card--ai" href="/ai/" data-reveal data-spotlight>
+          <div class="path-card__visual" aria-hidden="true">
+            <svg class="net" viewBox="0 0 320 160" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <linearGradient id="flow-gradient" x1="0" x2="1">
+                  <stop offset="0" stop-color="#c3b8ff"></stop>
+                  <stop offset="1" stop-color="#62e4ff"></stop>
+                </linearGradient>
+              </defs>
+              <g>
+                <line x1="30" y1="40" x2="120" y2="30"></line>
+                <line x1="30" y1="40" x2="120" y2="80"></line>
+                <line x1="30" y1="120" x2="120" y2="80"></line>
+                <line x1="30" y1="120" x2="120" y2="130"></line>
+                <line x1="120" y1="30" x2="210" y2="55"></line>
+                <line x1="120" y1="80" x2="210" y2="55"></line>
+                <line x1="120" y1="80" x2="210" y2="110"></line>
+                <line x1="120" y1="130" x2="210" y2="110"></line>
+                <line x1="210" y1="55" x2="290" y2="80"></line>
+                <line x1="210" y1="110" x2="290" y2="80"></line>
+                <line class="flow" x1="30" y1="40" x2="120" y2="80"></line>
+                <line class="flow" x1="120" y1="80" x2="210" y2="55"></line>
+                <line class="flow" x1="210" y1="55" x2="290" y2="80"></line>
+                <line class="flow" x1="30" y1="120" x2="120" y2="130"></line>
+                <line class="flow" x1="120" y1="130" x2="210" y2="110"></line>
+                <line class="flow" x1="210" y1="110" x2="290" y2="80"></line>
+              </g>
+              <circle cx="30" cy="40" r="6"></circle>
+              <circle cx="30" cy="120" r="6"></circle>
+              <circle cx="120" cy="30" r="6"></circle>
+              <circle class="hot" cx="120" cy="80" r="6"></circle>
+              <circle cx="120" cy="130" r="6"></circle>
+              <circle cx="210" cy="55" r="6"></circle>
+              <circle cx="210" cy="110" r="6"></circle>
+              <circle class="hot" cx="290" cy="80" r="8"></circle>
+            </svg>
+          </div>
           <p class="eyebrow">AI application engineering</p>
           <h3>Evaluated LLM systems, retrieval, and production services.</h3>
-          <p>Receipty, Spookling, Revera, and vision-based mobile products.</p>
+          <p>AgentLookout, Receipty, Spookling, Revera, and vision-based mobile products.</p>
           <span class="text-link">Explore AI work <ArrowIcon /></span>
         </a>
-        <a class="path-card path-card--ios" href="/ios/" data-reveal>
-          <span class="path-card__number">02</span>
+        <a class="path-card path-card--ios" href="/ios/" data-reveal data-spotlight>
+          <div class="path-card__visual" aria-hidden="true">
+            <div class="stack"><span></span><span></span><span></span></div>
+          </div>
           <p class="eyebrow">Senior iOS engineering</p>
           <h3>Leadership, platform depth, performance, and reliability.</h3>
-          <p>Sellou, LNER, RaceMe, Revera, BrightBike, and mobility SDKs.</p>
+          <p>AgentLookout, Sellou, LNER, RaceMe, Revera, and mobility SDKs.</p>
           <span class="text-link">Explore iOS work <ArrowIcon /></span>
         </a>
       </div>
     </div>
   </section>
 
-  <section class="section section--night" id="selected-work">
+  <section class="section section--raised" id="selected-work">
     <div class="container-wide">
       <SectionIntro
         eyebrow="Selected evidence"
         title="Different systems. The same delivery discipline."
         description="Four representative projects show how product judgment, explicit constraints, and measurable engineering quality carry across both specializations."
-        theme="dark"
       />
-      <div class="work-grid">
+      <div class="work-grid work-grid--bento">
         {
           featuredWork.map((project) => (
             <ProjectCard
@@ -123,8 +230,8 @@ const capabilities = skillsFor('general');
         }
       </div>
       <div class="section-action" data-reveal>
-        <a class="button button--light" href="/work/"
-          >Explore all 11 selected products <ArrowIcon /></a
+        <a class="button button--ghost" href="/work/" data-magnetic
+          >Explore all 12 selected projects <ArrowIcon /></a
         >
       </div>
     </div>
@@ -134,7 +241,7 @@ const capabilities = skillsFor('general');
     <div class="container experience-grid">
       <div class="experience-sticky" data-reveal>
         <p class="eyebrow">Experience</p>
-        <h2>Growing scope, grounded in shipped work.</h2>
+        <h2>Growing scope, grounded in <em>shipped work.</em></h2>
         <p>
           From iOS engineering and team leadership to product ownership across AI, web, and backend,
           each step expands the surface area without changing the standard for reliability.
@@ -164,7 +271,7 @@ const capabilities = skillsFor('general');
     </div>
   </section>
 
-  <section class="section section--surface" id="about">
+  <section class="section section--raised" id="about">
     <div class="container">
       <div class="about-grid">
         <div class="portrait-frame" data-reveal>
@@ -180,17 +287,16 @@ const capabilities = skillsFor('general');
           <p class="about-copy__lead">{profile.about}</p>
           <div class="education-note">
             <strong>B.S. Computer Science · University of Debrecen</strong>
-            <span>2017 — 2020</span>
+            <span>2017 — 2020 · Debrecen, Hungary</span>
             <span>Graduated first in cohort · Fully funded scholarship</span>
-            <span>Debrecen, Hungary</span>
           </div>
         </div>
       </div>
 
-      <div class="skills-grid" aria-label="Technical capabilities">
+      <div class="skills-grid skills-grid--3" aria-label="Technical capabilities">
         {
           capabilities.map((group) => (
-            <article class="skill-group" data-reveal>
+            <article class="skill-group" data-reveal data-spotlight>
               <h3>{group.title}</h3>
               <ul>
                 {group.items.map((item) => (
@@ -206,27 +312,26 @@ const capabilities = skillsFor('general');
 
   <section class="section">
     <div class="container-wide contact-panel" data-reveal>
-      <div class="contact-panel__content">
-        <p class="eyebrow">Roles and freelance projects</p>
-        <h2>Need an engineer to strengthen your team or move a product forward?</h2>
-        <p>
-          I’m open to senior iOS and AI application engineering roles, as well as selected freelance
-          projects. Based in Egypt and available for remote work or relocation, I’d be glad to hear
-          what you’re building.
-        </p>
-        <div class="contact-panel__actions">
-          <a class="button button--light" href={`mailto:${profile.email}`}
-            >Start a conversation <ArrowIcon /></a
-          >
-          <a class="contact-panel__link" href={profile.resumes.ai} target="_blank">AI résumé ↗</a>
-          <a class="contact-panel__link" href={profile.resumes.ios} target="_blank">iOS résumé ↗</a>
-          <a class="contact-panel__link" href={profile.linkedin} target="_blank" rel="noreferrer"
-            >LinkedIn ↗</a
-          >
-          <a class="contact-panel__link" href={profile.github} target="_blank" rel="noreferrer"
-            >GitHub ↗</a
-          >
-        </div>
+      <p class="eyebrow">Roles and freelance projects</p>
+      <h2>Need an engineer to strengthen your team or <em>move a product forward?</em></h2>
+      <p>
+        I’m open to senior iOS and AI application engineering roles, as well as selected freelance
+        projects. Based in Egypt and available for remote work or relocation, I’d be glad to hear
+        what you’re building.
+      </p>
+      <a class="contact-panel__email" href={`mailto:${profile.email}`}>{profile.email}</a>
+      <div class="contact-panel__actions">
+        <a class="button" href={`mailto:${profile.email}`} data-magnetic
+          >Start a conversation <ArrowIcon /></a
+        >
+        <a class="contact-panel__link" href={profile.resumes.ai} target="_blank">AI résumé ↗</a>
+        <a class="contact-panel__link" href={profile.resumes.ios} target="_blank">iOS résumé ↗</a>
+        <a class="contact-panel__link" href={profile.linkedin} target="_blank" rel="noreferrer"
+          >LinkedIn ↗</a
+        >
+        <a class="contact-panel__link" href={profile.github} target="_blank" rel="noreferrer"
+          >GitHub ↗</a
+        >
       </div>
     </div>
   </section>

@@ -9,8 +9,8 @@ const iosActive = pathname.startsWith('/ios');
 <footer class="site-footer">
   <div class="container-wide site-footer__inner">
     <div>
-      <a class="wordmark wordmark--footer" href="/" aria-label="Kirlos Yousef, home"
-        ><span>KY</span></a
+      <a class="wordmark" href="/" aria-label="Kirlos Yousef, home"
+        ><span aria-hidden="true">KY</span></a
       >
       <p>Senior Software Engineer.<br />iOS & AI application engineering.</p>
     </div>
@@ -26,6 +26,9 @@ const iosActive = pathname.startsWith('/ios');
       >
       <a href={`mailto:${profile.email}`}>Email</a>
     </nav>
-    <p class="site-footer__legal">© {year} Kirlos Yousef<br />Cairo time · EEST</p>
+    <p class="site-footer__legal">
+      © {year} Kirlos Yousef<br />Cairo · <time data-clock>local time</time>
+    </p>
   </div>
+  <p class="site-footer__giant" aria-hidden="true">Kirlos Yousef</p>
 </footer>

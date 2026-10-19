@@ -30,18 +30,18 @@ test('homepage presents equal AI and iOS recruiter paths', async ({ page }) => {
 test('specialization pages use their intended project ranking', async ({ page }) => {
   await page.goto('/ai/');
   await expect(page.locator('[data-project-card] h3').allTextContents()).resolves.toEqual([
+    'AgentLookout',
     'Receipty',
     'Spookling',
     'Revera AI',
-    'Plot My Calories',
   ]);
 
   await page.goto('/ios/');
   await expect(page.locator('[data-project-card] h3').allTextContents()).resolves.toEqual([
+    'AgentLookout',
     'Sellou',
     'LNER',
     'RaceMe',
-    'Revera AI',
   ]);
 });
 
@@ -71,13 +71,13 @@ test('AI and iOS paths show the same full experience without cross-promoting the
 
 test('work filters preserve one shared project library', async ({ page }) => {
   await page.goto('/work/');
-  await expect(page.locator('[data-project-card]:visible')).toHaveCount(8);
+  await expect(page.locator('[data-project-card]:visible')).toHaveCount(9);
   await page.getByRole('button', { name: 'AI engineering' }).click();
-  await expect(page.locator('[data-project-card]:visible')).toHaveCount(4);
+  await expect(page.locator('[data-project-card]:visible')).toHaveCount(5);
   await page.getByRole('button', { name: 'iOS engineering' }).click();
-  await expect(page.locator('[data-project-card]:visible')).toHaveCount(7);
-  await page.getByRole('button', { name: 'All work' }).click();
   await expect(page.locator('[data-project-card]:visible')).toHaveCount(8);
+  await page.getByRole('button', { name: 'All work' }).click();
+  await expect(page.locator('[data-project-card]:visible')).toHaveCount(9);
 });
 
 test('curated independent products are visible and linked', async ({ page }) => {
@@ -163,8 +163,8 @@ test('phone layouts fit compact widths and retain usable navigation and filters'
       ).toBeGreaterThanOrEqual(44);
     }
     await page.getByRole('button', { name: 'AI engineering' }).click();
-    await expect(page.locator('[data-project-card]:visible')).toHaveCount(4);
-    await expect(page.locator('[data-filter-status]')).toContainText('Showing 4 AI case studies');
+    await expect(page.locator('[data-project-card]:visible')).toHaveCount(5);
+    await expect(page.locator('[data-filter-status]')).toContainText('Showing 5 AI case studies');
 
     for (const [route, oppositeTrack] of [
       ['/ai/', '/ios/'],

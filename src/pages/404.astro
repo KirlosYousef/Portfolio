@@ -1,4 +1,5 @@
 ---
+import HeroBackdrop from '@/components/HeroBackdrop.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
@@ -7,6 +8,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   description="The page you requested could not be found."
 >
   <section class="error-page">
+    <HeroBackdrop />
     <div class="container">
       <p class="eyebrow">404 · Off route</p>
       <h1>404</h1>
@@ -14,7 +16,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
         This page took a different path. The selected work and the rest of the portfolio are still
         right where they should be.
       </p>
-      <a class="button button--ink" href="/">Return home</a>
+      <a class="button" href="/" data-magnetic>Return home</a>
     </div>
   </section>
 </BaseLayout>

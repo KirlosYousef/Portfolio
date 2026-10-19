@@ -35,13 +35,16 @@ const number = String(order).padStart(2, '0');
   style={`--project-accent: ${accent}`}
   data-reveal
   data-project-card
+  data-spotlight
   data-tracks={tracks.join(' ')}
 >
   <a class="project-card__link" href={`/work/${slug}/`} aria-label={`Read the ${title} case study`}>
+    <div class="project-card__meta" aria-hidden="true">
+      <span>{number}</span>
+      <span>{platforms.join(' · ')}</span>
+    </div>
     <div class="project-card__media" transition:name={`project-image-${slug}`} data-depth>
-      <span class="project-card__number">{number}</span>
       <AppImage src={image} alt={imageAlt} />
-      <span class="project-card__platforms">{platforms.join(' · ')}</span>
     </div>
     <div class="project-card__copy">
       <p class="eyebrow">{eyebrow}</p>

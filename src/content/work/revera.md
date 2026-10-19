@@ -1,11 +1,11 @@
 ---
 title: 'Revera — AI Note Taker'
 shortTitle: 'Revera AI'
-order: 5
+order: 6
 tracks: ['ai', 'ios']
 priority:
-  ai: 3
-  ios: 4
+  ai: 4
+  ios: 5
 eyebrow: 'Independent product · Voice intelligence'
 role: 'Creator & iOS Engineer'
 period: '2025 — Present'

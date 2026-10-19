@@ -8,19 +8,19 @@ const workDirectory = resolve(process.cwd(), 'src/content/work');
 const caseStudyFiles = readdirSync(workDirectory).filter((file) => file.endsWith('.md'));
 
 describe('portfolio content', () => {
-  it('contains eight featured case studies and three additional products', () => {
-    expect(caseStudyFiles).toHaveLength(8);
+  it('contains nine featured case studies and three additional products', () => {
+    expect(caseStudyFiles).toHaveLength(9);
     expect(additionalProducts).toHaveLength(3);
   });
 
-  it('contains eleven unique selected project names', () => {
+  it('contains twelve unique selected project names', () => {
     const featuredNames = caseStudyFiles.map((file) => {
       const content = readFileSync(resolve(workDirectory, file), 'utf8');
       return content.match(/^shortTitle: '(.+)'$/m)?.[1];
     });
     const names = [...featuredNames, ...additionalProducts.map((project) => project.name)];
     expect(names.every(Boolean)).toBe(true);
-    expect(new Set(names).size).toBe(11);
+    expect(new Set(names).size).toBe(12);
   });
 
   it('keeps every external project link secure', () => {
