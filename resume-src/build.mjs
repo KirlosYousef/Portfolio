@@ -128,6 +128,6 @@ for (const [name, r] of Object.entries(resumes)) {
   }, contentHeight - 8);
   const out = resolve(root, 'public/resume', `${name}.pdf`);
   await page.pdf({ path: out, format: 'Letter', preferCSSPageSize: true, printBackground: true });
-  console.log(`${name}: scale ${low.toFixed(3)}`);
+  process.stdout.write(`${name}: scale ${low.toFixed(3)}\n`);
 }
 await browser.close();
