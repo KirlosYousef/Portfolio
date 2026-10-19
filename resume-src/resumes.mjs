@@ -52,7 +52,7 @@ export const resumes = {
     skills: [
       [
         'LLM & agents',
-        'OpenAI SDK, OpenRouter, Gemini, structured outputs, tool calling, LangGraph, MCP, human-in-the-loop approval, embeddings, reranking',
+        'OpenAI SDK, OpenRouter, Gemini, structured outputs, tool calling, LangGraph, MCP, human-in-the-loop, embeddings, reranking',
       ],
       [
         'Evals & observability',
@@ -116,7 +116,7 @@ export const resumes = {
         bullets: [
           'Built a FastAPI vision pipeline with strict JSON schemas, Pydantic validation and explicit review/failure outcomes; passed 60/60 labelled checks at p95 3.4 s and ~$0.0005 per receipt',
           'Built a labelled retrieval eval (69 queries; keyword, dense, hybrid and rerank strategies) behind answers that cite receipts or return not-found; recall@5 1.0 on the 64 answerable queries',
-          'Built a LangGraph tool-calling agent with bounded steps and human approval for writes; exposed the same tools over an MCP server',
+          'Built a LangGraph tool-calling agent with bounded steps and human approval for writes; exposed its tools over MCP',
           'Added step tracing, token/cost logging and PII redaction; versioned prompts (v1 vs v2) are compared on the eval set, and CI enforces 178 tests and an 80% branch-coverage floor',
         ],
       },
@@ -128,7 +128,7 @@ export const resumes = {
           'https://apps.apple.com/us/app/revera-ai-note-taker-scribe/id6748306699',
         ],
         bullets: [
-          'Built a Whisper/SFSpeech pipeline with offline queuing and interruption recovery; cut upload data ~82% via 16 kHz mono conversion',
+          'Built a Whisper/SFSpeech pipeline with offline queuing and interruption recovery; cut upload data ~82% via 16 kHz mono',
           'Put OpenAI behind a Cloudflare Worker with allowlisted routes and server-side usage limits, so no API key ships in the app',
         ],
       },
@@ -141,10 +141,10 @@ export const resumes = {
     summary:
       'Senior iOS engineer and tech lead with 5+ years shipping consumer apps and enterprise mobility SDKs. Led 5 iOS engineers and shipped 11 App Store products spanning offline sync, real-time data, payments, video, watchOS and AI features. Cut release cycles 50%, video startup 40% and checkout time below 8 seconds.',
     skills: [
-      ['iOS', 'Swift, SwiftUI, UIKit, Swift Concurrency, Combine, Objective-C'],
+      ['iOS & macOS', 'Swift, SwiftUI, UIKit, Swift Concurrency, Combine, Objective-C'],
       [
         'Architecture & data',
-        'MVVM-C, Clean Architecture, Swift Package Manager modules, Core Data, SwiftData, offline-first sync',
+        'MVVM-C, Clean Architecture, Swift Package Manager, Core Data, SwiftData, offline-first sync',
       ],
       [
         'Quality & delivery',
@@ -152,7 +152,7 @@ export const resumes = {
       ],
       [
         'Platforms',
-        'Stripe, Apple Pay, StoreKit 2, EventKit, WatchConnectivity, AVFoundation, AVKit, WidgetKit, Live Activities, macOS',
+        'Stripe, Apple Pay, StoreKit 2, EventKit, WatchConnectivity, AVFoundation, AVKit, WidgetKit, Live Activities',
       ],
       ['Applied AI', 'OpenAI and Gemini APIs, SSE streaming, tool calling, Whisper, vision input'],
     ],
@@ -175,7 +175,7 @@ export const resumes = {
             period: '02/2025 – 08/2025',
             bullets: [
               'Led iOS technical direction and mentored 2 engineers; introduced CI/CD that cut release cycle time by 50%',
-              'Rebuilt the video playback layer with AVKit and HLS: 40% faster startup, 20% smaller initial download via On-Demand Resources',
+              'Rebuilt video playback with AVKit/HLS: 40% faster startup, 20% smaller initial download via On-Demand Resources',
               'Unified deep-link and push-notification routing so every launch state resolves to the right screen',
               'Built Plot My Calories end to end with OpenAI Vision and Swift Concurrency, keeping AI work off the main thread',
             ],
@@ -220,4 +220,4 @@ export const resumes = {
   },
 };
 export const education =
-  'B.S. Computer Science, University of Debrecen, Hungary · 2017 – 2020 · Graduated first in cohort, fully funded scholarship';
+  'B.S. Computer Science, University of Debrecen, Hungary · 2017 – 2020 · Graduated first in cohort, full scholarship';
