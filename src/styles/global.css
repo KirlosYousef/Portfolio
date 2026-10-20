@@ -678,6 +678,9 @@ a:hover .text-link svg,
   z-index: 0;
   inset: 0;
   overflow: hidden;
+  /* Without paint containment WebKit snapshots the drifting glows' full
+     unclipped extent on every view transition (15s+ on CI's software renderer). */
+  contain: paint;
   pointer-events: none;
 }
 
@@ -2050,6 +2053,7 @@ a:hover .text-link svg,
   border: 1px solid var(--line-strong);
   border-radius: var(--panel-radius);
   clip-path: inset(0 round var(--panel-radius));
+  contain: paint;
   background: var(--bg-2);
   isolation: isolate;
 }
@@ -2973,12 +2977,6 @@ a:hover .text-link svg,
   .skills-grid > :nth-child(4) {
     --reveal-delay: 360ms;
   }
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.45s;
-  animation-timing-function: var(--ease);
 }
 
 @media (prefers-reduced-motion: reduce) {

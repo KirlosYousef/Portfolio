@@ -43,7 +43,7 @@ const number = String(order).padStart(2, '0');
       <span>{number}</span>
       <span>{platforms.join(' · ')}</span>
     </div>
-    <div class="project-card__media" transition:name={`project-image-${slug}`} data-depth>
+    <div class="project-card__media" data-depth>
       <AppImage src={image} alt={imageAlt} />
     </div>
     <div class="project-card__copy">

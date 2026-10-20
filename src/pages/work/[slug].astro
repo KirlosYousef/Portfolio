@@ -81,7 +81,7 @@ const projectSchema = {
             <div><dt>Platforms</dt><dd>{data.platforms.join(' · ')}</dd></div>
           </dl>
         </div>
-        <div class="case-artwork" transition:name={`project-image-${entry.id}`}>
+        <div class="case-artwork">
           <AppImage src={data.image} alt={data.imageAlt} loading="eager" />
         </div>
       </div>

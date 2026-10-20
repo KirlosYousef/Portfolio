@@ -3,7 +3,6 @@ import '@fontsource-variable/manrope';
 import '@fontsource-variable/newsreader/wght-italic.css';
 import manropeFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 import newsreaderFont from '@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2?url';
-import { ClientRouter } from 'astro:transitions';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import { profile } from '@/data/profile';
@@ -80,12 +79,11 @@ const personSchema = {
     <meta name="twitter:image" content={socialImage} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
     {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
-    <ClientRouter />
   </head>
   <body data-page-track={pageTrack}>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="scroll-progress" aria-hidden="true"></div>
-    <div class="cursor-glow" aria-hidden="true" data-cursor-glow transition:persist></div>
+    <div class="cursor-glow" aria-hidden="true" data-cursor-glow></div>
     <Header />
     <main id="main-content">
       <slot />
@@ -525,7 +523,7 @@ const personSchema = {
         }
       };
 
-      document.addEventListener('astro:page-load', setupPortfolioUI);
+      setupPortfolioUI();
     </script>
   </body>
 </html>
