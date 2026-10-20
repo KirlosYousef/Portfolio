@@ -3,6 +3,7 @@ import '@fontsource-variable/manrope';
 import '@fontsource-variable/newsreader/wght-italic.css';
 import manropeFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 import newsreaderFont from '@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2?url';
+import { ClientRouter } from 'astro:transitions';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import { profile } from '@/data/profile';
@@ -79,11 +80,137 @@ const personSchema = {
     <meta name="twitter:image" content={socialImage} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
     {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    <ClientRouter />
+    <script is:inline>
+      // Effects tier: "full" by default, "lite" on low-power setups (reduced motion,
+      // Save-Data, very low-end hardware, software rendering, or a slow frame-rate
+      // probe). Lite drops page transitions and heavy effects, never content.
+      // Override: ?fx=lite|full on the URL, or localStorage.fx.
+      (() => {
+        const root = document.documentElement;
+        const read = (key) => {
+          try {
+            return sessionStorage.getItem(key);
+          } catch {
+            return null;
+          }
+        };
+        const write = (key, value) => {
+          try {
+            sessionStorage.setItem(key, value);
+          } catch {
+            /* storage unavailable: detect again next page */
+          }
+        };
+        let forced = new URLSearchParams(location.search).get('fx');
+        if (!forced) {
+          try {
+            forced = localStorage.getItem('fx');
+          } catch {
+            forced = null;
+          }
+        }
+        const lowPowerReason = () => {
+          if (matchMedia('(prefers-reduced-motion: reduce)').matches) return 'reduced-motion';
+          if (navigator.connection && navigator.connection.saveData) return 'save-data';
+          if (navigator.deviceMemory && navigator.deviceMemory <= 2) return 'low-memory';
+          if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2)
+            return 'few-cores';
+          try {
+            const gl = document.createElement('canvas').getContext('webgl');
+            const info = gl && gl.getExtension('WEBGL_debug_renderer_info');
+            const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : '';
+            if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(renderer)) {
+              return 'software-renderer';
+            }
+          } catch {
+            /* no WebGL: nothing to infer */
+          }
+          return null;
+        };
+        const apply = (tier, reason) => {
+          window.__fx = tier;
+          document.documentElement.dataset.fx = tier;
+          document.documentElement.dataset.fxReason = reason || '';
+          if (tier === 'lite') {
+            // Without this marker Astro's router does plain page loads (no view transitions).
+            document.querySelector('meta[name="astro-view-transitions-enabled"]')?.remove();
+          }
+        };
+
+        const cached = read('fx-tier');
+        let tier = 'full';
+        let reason = '';
+        if (forced === 'lite' || forced === 'full') {
+          tier = forced;
+          reason = 'forced';
+        } else if (cached) {
+          [tier, reason] = cached.split(':');
+        } else {
+          reason = lowPowerReason();
+          tier = reason ? 'lite' : 'full';
+          write('fx-tier', `${tier}:${reason || ''}`);
+        }
+        apply(tier, reason);
+        // Astro replaces <html> attributes when it swaps pages.
+        document.addEventListener('astro:after-swap', () =>
+          apply(window.__fx, root.dataset.fxReason),
+        );
+
+        // Self-healing guard: if snapshotting the page for a transition takes too long,
+        // the device cannot afford transitions. Drop to lite for the rest of the session.
+        let preparedAt = 0;
+        document.addEventListener('astro:after-preparation', () => {
+          preparedAt = performance.now();
+        });
+        document.addEventListener('astro:before-swap', () => {
+          if (
+            preparedAt &&
+            window.__fx === 'full' &&
+            !forced &&
+            performance.now() - preparedAt > 1500
+          ) {
+            write('fx-tier', 'lite:slow-transition');
+            apply('lite', 'slow-transition');
+          }
+          preparedAt = 0;
+        });
+
+        // Capable-looking device: confirm with a short frame-rate probe, once per session.
+        if (tier === 'full' && !forced && !read('fx-probed')) {
+          const probe = () => {
+            if (document.hidden) {
+              document.addEventListener('visibilitychange', probe, { once: true });
+              return;
+            }
+            const deltas = [];
+            let last = performance.now();
+            const step = (now) => {
+              if (document.hidden) return;
+              deltas.push(now - last);
+              last = now;
+              if (deltas.length < 48) {
+                requestAnimationFrame(step);
+                return;
+              }
+              const settled = deltas.slice(3).sort((x, y) => x - y);
+              write('fx-probed', '1');
+              if (settled[settled.length >> 1] > 34) {
+                write('fx-tier', 'lite:slow-frames');
+                apply('lite', 'slow-frames');
+              }
+            };
+            requestAnimationFrame(step);
+          };
+          addEventListener('load', () => setTimeout(probe, 1200), { once: true });
+        }
+      })();
+    </script>
   </head>
   <body data-page-track={pageTrack}>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="scroll-progress" aria-hidden="true"></div>
-    <div class="cursor-glow" aria-hidden="true" data-cursor-glow></div>
+    <div class="cursor-glow" aria-hidden="true" data-cursor-glow transition:persist></div>
     <Header />
     <main id="main-content">
       <slot />
@@ -407,7 +534,8 @@ const personSchema = {
           let lastDraw = 0;
           let lastPointerMove = 0;
           // Touch devices get a static frame: no pointer to follow, and it saves battery.
-          const animate = finePointer && !reduceMotion;
+          const isLite = () => document.documentElement.dataset.fx === 'lite';
+          const animate = finePointer && !reduceMotion && !isLite();
 
           const resize = () => {
             const bounds = host.getBoundingClientRect();
@@ -417,7 +545,7 @@ const personSchema = {
             canvas.width = Math.round(width * ratio);
             canvas.height = Math.round(height * ratio);
             context.setTransform(ratio, 0, 0, ratio, 0, 0);
-            if (!animate) draw(0);
+            if (!animate && !isLite()) draw(0);
           };
 
           const draw = (time: number) => {
@@ -445,7 +573,7 @@ const personSchema = {
 
           const loop = (time: number) => {
             fieldFrame = 0;
-            if (!inView || document.hidden) return;
+            if (!inView || document.hidden || isLite()) return;
             easedX += (pointerFieldX - easedX) * 0.08;
             easedY += (pointerFieldY - easedY) * 0.08;
             // Full rate while the pointer moves; 30fps for the idle wave; paused under the menu.
@@ -523,7 +651,7 @@ const personSchema = {
         }
       };
 
-      setupPortfolioUI();
+      document.addEventListener('astro:page-load', setupPortfolioUI);
     </script>
   </body>
 </html>

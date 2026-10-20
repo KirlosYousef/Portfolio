@@ -214,3 +214,56 @@ for (const resume of [
     expect(response.headers()['content-type']).toContain('application/pdf');
   });
 }
+
+test.describe('effects tiers', () => {
+  // Other projects pin the tier, which would mask what these tests detect.
+  test.beforeEach(({}, testInfo) => {
+    test.skip(
+      testInfo.project.name !== 'chromium',
+      'tier detection is checked once, in the unpinned Chromium project',
+    );
+  });
+
+  test('lite tier removes page transitions and heavy effects but keeps content', async ({
+    page,
+  }) => {
+    await page.goto('/?fx=lite');
+    await expect(page.locator('html')).toHaveAttribute('data-fx', 'lite');
+    await expect(page.locator('meta[name="astro-view-transitions-enabled"]')).toHaveCount(0);
+    await expect(page.locator('.signal-field')).toBeHidden();
+    await expect(page.locator('.cursor-glow')).toBeHidden();
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await page.getByRole('link', { name: 'Work', exact: true }).first().click();
+    await expect(page).toHaveURL(/\/work\/$/);
+    await expect(page.locator('[data-project-card]:visible')).toHaveCount(9);
+  });
+
+  test('full tier keeps page transitions and survives client-side navigation', async ({ page }) => {
+    await page.goto('/?fx=full');
+    await expect(page.locator('html')).toHaveAttribute('data-fx', 'full');
+    await expect(page.locator('meta[name="astro-view-transitions-enabled"]')).toHaveCount(1);
+    await expect(page.locator('.signal-field')).toBeVisible();
+    await page.getByRole('link', { name: 'Work', exact: true }).first().click();
+    await expect(page).toHaveURL(/\/work\/$/);
+    await expect(page.locator('html')).toHaveAttribute('data-fx', 'full');
+    await expect(page.locator('meta[name="astro-view-transitions-enabled"]')).toHaveCount(1);
+  });
+
+  test('reduced motion and Save-Data both select the lite tier', async ({ browser }) => {
+    const reduced = await browser.newContext({ reducedMotion: 'reduce' });
+    const reducedPage = await reduced.newPage();
+    await reducedPage.goto('http://127.0.0.1:4322/');
+    await expect(reducedPage.locator('html')).toHaveAttribute('data-fx-reason', 'reduced-motion');
+    await reduced.close();
+
+    const saver = await browser.newContext();
+    const saverPage = await saver.newPage();
+    await saverPage.addInitScript(() => {
+      Object.defineProperty(navigator, 'connection', { value: { saveData: true } });
+    });
+    await saverPage.goto('http://127.0.0.1:4322/');
+    await expect(saverPage.locator('html')).toHaveAttribute('data-fx', 'lite');
+    await expect(saverPage.locator('html')).toHaveAttribute('data-fx-reason', 'save-data');
+    await saver.close();
+  });
+});

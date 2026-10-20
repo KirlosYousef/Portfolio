@@ -678,8 +678,8 @@ a:hover .text-link svg,
   z-index: 0;
   inset: 0;
   overflow: hidden;
-  /* Without paint containment WebKit snapshots the drifting glows' full
-     unclipped extent on every view transition (15s+ on CI's software renderer). */
+  /* Paint containment keeps WebKit from snapshotting the drifting glows' full
+     unclipped extent on every view transition. */
   contain: paint;
   pointer-events: none;
 }
@@ -2977,6 +2977,48 @@ a:hover .text-link svg,
   .skills-grid > :nth-child(4) {
     --reveal-delay: 360ms;
   }
+}
+
+/* Lite mode: set on <html> by the head script in BaseLayout on low-power setups.
+   Same content and layout, without animation, blur, grain or page transitions. */
+html[data-fx='lite'] *,
+html[data-fx='lite'] *::before,
+html[data-fx='lite'] *::after {
+  animation: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html[data-fx='lite'] [data-reveal] {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+html[data-fx='lite'] body::after,
+html[data-fx='lite'] .signal-field,
+html[data-fx='lite'] .cursor-glow,
+html[data-fx='lite'] .scroll-progress,
+html[data-fx='lite'] .contact-panel::before,
+html[data-fx='lite'] .portrait-frame::before {
+  display: none;
+}
+
+html[data-fx='lite'] .contact-panel {
+  background:
+    radial-gradient(40rem 24rem at 82% 18%, rgb(168 152 255 / 22%), transparent 70%),
+    radial-gradient(36rem 22rem at 12% 95%, rgb(255 111 142 / 15%), transparent 70%), var(--bg-2);
+}
+
+html[data-fx='lite'] .site-header__inner::before {
+  background: rgb(10 11 16 / 92%);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+  animation-timing-function: var(--ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
